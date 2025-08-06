@@ -48,11 +48,6 @@ edge_options.add_argument('--profile-directory=Default')
 A variável de sistema %LOCALAPPDATA% substitui "C:\\Users\\usuarioXXXXXXXX\\AppData\\Local"
 O perfil encontrado, caso não seja o Default, deve ser trocado na string '--profile-directory='
 
-Por fim, configure o local do driver no main_edge.py 
-
-```python
-edge_driver_path = r"C:\SEPLAN\selenium_siop-main\drivers\edge\msedgedriver.exe"
-```
 
 ## Uso
 

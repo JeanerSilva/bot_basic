@@ -32,7 +32,9 @@ def finaliza_navegador():
 
 def iniciar_driver():
     edge_options = Options()
-    edge_driver_path = r"C:\SEPLAN\selenium_siop-main\drivers\edge\msedgedriver.exe"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    edge_driver_path = BASE_DIR + r"\drivers\edge\msedgedriver.exe"
+    print(f"Buscando edge_driver em : {edge_driver_path}")
     service = Service(executable_path=edge_driver_path)
     caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho) 
@@ -127,8 +129,8 @@ def main():
     #executa_tabela()   
     #listar_programas()
     #exportar_programas()
-    #listar_objetivo_específico("0002")
-    listar_objetivos_específicos()
+    listar_objetivo_específico("0002")
+    #listar_objetivos_específicos()
     #exportar_objetivos_específicos()
     #time.sleep(5)
     #listar_programa("1144")

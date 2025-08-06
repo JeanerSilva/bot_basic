@@ -2,6 +2,7 @@ import os
 import re
 import time
 import subprocess
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
@@ -43,8 +44,8 @@ def iniciar_driver():
 
 def seleciona_ano_e_perfil():
     print(get_elemento("exercicio", "xpath"))
-    preenche_seletor_por_xpath("Exercício", get_elemento("exercicio", "xpath"), ano) #'//label[contains(text(), "Exercício")]/following-sibling::div/select'
-    preenche_seletor_por_xpath("Perfil", get_elemento("perfil", "xpath"), perfil) #'//label[contains(text(), "Perfil")]/following-sibling::div/select'
+    preenche_seletor_por_xpath("Exercício", get_elemento("exercicio", "xpath"), ano) 
+    preenche_seletor_por_xpath("Perfil", get_elemento("perfil", "xpath"), perfil) 
 
 
 def listar_objetivo_específico(objetivo):  
@@ -112,7 +113,6 @@ def main():
     wait = WebDriverWait(driver, 120)   
     siop_utils.driver = driver
     siop_utils.wait = wait
-
     
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
@@ -130,12 +130,12 @@ def main():
     driver.quit()
 
 if __name__ == "__main__":
-    print ("Iniciando...")
+    print ("Iniciando ...")
 
-    #resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
-
-    #if resposta != 's':
-    #    print("Operação cancelada pelo usuário.")
-    #    sys.exit(0)
+    resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
+    if resposta != 's':
+        print("Operação cancelada pelo usuário.")
+        sys.exit(0)
+        
     finaliza_navegador()
     main()

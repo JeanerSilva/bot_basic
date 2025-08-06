@@ -41,15 +41,15 @@ def iniciar_driver():
     edge_options.add_argument('--profile-directory=Default')
     return webdriver.Edge(service=service, options=edge_options)
 
-def seleciona_ano_e_perfil(ano, perfil):
+def seleciona_ano_e_perfil():
     print(get_elemento("exercicio", "xpath"))
     preenche_seletor_por_xpath("Exercício", get_elemento("exercicio", "xpath"), ano) #'//label[contains(text(), "Exercício")]/following-sibling::div/select'
     preenche_seletor_por_xpath("Perfil", get_elemento("perfil", "xpath"), perfil) #'//label[contains(text(), "Perfil")]/following-sibling::div/select'
 
 
-def listar_objetivo_específico(objetivo, ano, perfil):  
+def listar_objetivo_específico(objetivo):  
     driver.get(get_url("listar_objetivo_específico"))
-    seleciona_ano_e_perfil(ano, perfil)
+    seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
@@ -58,18 +58,31 @@ def listar_objetivo_específico(objetivo, ano, perfil):
     )    
     clicar_botao("Procurar", "submit")    
 
-def listar_programa(programa, ano, perfil):  
+def listar_objetivos_específicos():  
+    driver.get(get_url("listar_objetivo_específico"))
+    seleciona_ano_e_perfil()
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
+    driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
+    print("✅ Container principal carregado.")
+    clicar_botao("Procurar", "submit")  
+
+def exportar_objetivos_específicos():  
+    listar_objetivos_específicos()
+    aguarda_por_xpath("Tabela Objetivos", get_elemento("tabela_resultados_objetivos_específicos", "xpath")) 
+    clicar_botao("Exportar...", "button") 
+
+def listar_programa(programa):  
     driver.get(get_url("listar_programa"))
-    seleciona_ano_e_perfil(ano, perfil)
+    seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Programa", get_elemento("ppa.programa.programa_input", "xpath"), programa)    
     clicar_botao("Procurar", "submit")    
 
-def listar_programas(ano, perfil):  
+def listar_programas():  
     driver.get(get_url("listar_programa"))
-    seleciona_ano_e_perfil(ano, perfil)
+    seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
@@ -77,8 +90,8 @@ def listar_programas(ano, perfil):
     aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
     clicar_botao("Exportar...", "button") 
 
-def exportar_programas(ano, perfil):  
-    listar_programas(ano, perfil)
+def exportar_programas():  
+    listar_programas()
     aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
     clicar_botao("Exportar...", "button") 
 
@@ -87,7 +100,7 @@ def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
     return pd.read_excel(arquivo, sheet_name=aba)
 
-def executa_tabela(ano, perfil):
+def executa_tabela():
     arquivo = "lista.xlsx"
     aba = "Plan1"
     df = abrir_excel(arquivo, aba)
@@ -95,29 +108,33 @@ def executa_tabela(ano, perfil):
     print(df.head())
     for programa in df["Programa"]:
         print(programa)
-        listar_programa("1144", ano, perfil)
+        listar_programa("1144")
         time.sleep(1)
         clicar_botao("Limpar", "submit")    
         time.sleep(1)
 
 def main():
-    global driver, wait
+    global driver, wait, ano, perfil
     driver = iniciar_driver()
     wait = WebDriverWait(driver, 120)   
     siop_utils.driver = driver
     siop_utils.wait = wait
 
+    
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
-    #executa_tabela (ano, perfil)   
+    #executa_tabela ()   
 
-    #listar_programas(ano, perfil)
-    #exportar_programas(ano, perfil)
+    #listar_programas()
+    #exportar_programas()
 
-    listar_objetivo_específico("0002", ano, perfil)
+    #listar_objetivo_específico("0002")
+
+    #listar_objetivos_específicos()
+    exportar_objetivos_específicos()
     #time.sleep(5)
-    #listar_programa("1144", ano, perfil)
+    #listar_programa("1144")
 
     time.sleep(20)
     driver.quit()

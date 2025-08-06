@@ -23,6 +23,11 @@
     "item": "tabela_resultados_programas",
     "id": "",
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaPrograma:tblProgramas\"]/thead/tr[1]"
+  },
+  {
+    "item": "tabela_resultados_objetivos_específicos",
+    "id": "",
+    "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:tblObjetivosEspecificos\"]/thead"
   }
 ]
 

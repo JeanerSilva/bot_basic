@@ -91,9 +91,10 @@ def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
     return pd.read_excel(arquivo, sheet_name=aba)
 
-def muda_para_iframe():
+def navega_para_painel():
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
+    print("✅ Container principal carregado.")
 
 def clica_botao(texto, type):
     try:

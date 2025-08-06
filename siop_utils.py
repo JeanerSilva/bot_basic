@@ -40,7 +40,7 @@ def preencher_input_por_id(descricao, element_id, texto):
         input_element.send_keys(texto)
         print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
     except TimeoutException:
-        _registrar_erro(driver, descricao, element_id)
+        _registrar_erro(descricao, element_id)
 
 def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, delay=1):
     """Seleciona uma opção visível em um <select> por ID."""
@@ -61,10 +61,9 @@ def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, 
 
         print(f"❌ Falha ao selecionar '{texto_visivel}' em '{descricao}' após {tentativas} tentativas.")
     except TimeoutException:
-        _registrar_erro(driver, descricao, element_id)
+        _registrar_erro(descricao, element_id)
 
-def clicar_botao(texto="Procurar"):
-    """Clica em um botão do tipo submit com determinado texto."""
+def clicar_botao(texto):
     try:
         print(f"🕓 Aguardando botão '{texto}'...")
         botao = wait.until(
@@ -101,7 +100,7 @@ def preencher_input_por_xpath(descricao, xpath, texto):
         input_element.send_keys(texto)
         print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
     except TimeoutException:
-        _registrar_erro(driver, descricao, xpath)
+        _registrar_erro(descricao, xpath)
 
 def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=2, delay=1):
     try:

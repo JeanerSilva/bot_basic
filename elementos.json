@@ -8,5 +8,15 @@
     "item": "ppa.programa.programa_input",
     "id": "form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo",
     "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo']"
+  },
+  {
+    "item": "exercicio",
+    "id": "",
+    "xpath": "//label[contains(text(), \"Exercício\")]/following-sibling::div/select"
+  },
+  {
+    "item": "perfil",
+    "id": "",
+    "xpath": "//label[contains(text(), \"Perfil\")]/following-sibling::div/select"
   }
 ]

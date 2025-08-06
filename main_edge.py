@@ -6,7 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import subprocess
-from siop_utils import preencher_input_por_id, preenche_seletor_por_id, clicar_botao
+#from siop_utils import preencher_input_por_id, preenche_seletor_por_id
+from siop_utils import clicar_botao
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
 from siop_utils import get_elemento, get_url
 import siop_utils
@@ -41,8 +42,9 @@ def iniciar_driver():
     return webdriver.Edge(service=service, options=edge_options)
 
 def seleciona_ano_e_perfil(ano, perfil):
-    preenche_seletor_por_xpath("Exercício", '//label[contains(text(), "Exercício")]/following-sibling::div/select', ano)
-    preenche_seletor_por_xpath("Perfil", '//label[contains(text(), "Perfil")]/following-sibling::div/select', perfil)
+    print(get_elemento("exercicio", "xpath"))
+    preenche_seletor_por_xpath("Exercício", get_elemento("exercicio", "xpath"), ano) #'//label[contains(text(), "Exercício")]/following-sibling::div/select'
+    preenche_seletor_por_xpath("Perfil", get_elemento("perfil", "xpath"), perfil) #'//label[contains(text(), "Perfil")]/following-sibling::div/select'
 
 
 def listar_objetivo_específico(objetivo, ano, perfil):  
@@ -69,14 +71,17 @@ def main():
     global driver, wait
     driver = iniciar_driver()
     wait = WebDriverWait(driver, 120)   
-    # Compartilha com siop_utils
     siop_utils.driver = driver
     siop_utils.wait = wait
-      
-    #listar_objetivo_específico("0002", "2025", "Controle de Qualidade - SEPLAN")
-    listar_programa("1144", "2025", "Controle de Qualidade - SEPLAN")
 
-    time.sleep(20)
+    ano = "2025"
+    perfil = "Controle de Qualidade - SEPLAN"
+      
+    listar_objetivo_específico("0002", ano, perfil)
+    time.sleep(5)
+    listar_programa("1144", ano, perfil)
+
+    time.sleep(5)
     driver.quit()
 
 if __name__ == "__main__":

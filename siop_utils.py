@@ -31,11 +31,14 @@ def get_url(atividade):
             return item["url"]
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
 
+def aguarda_por_id(descricao, id):
+    print(f"🕓 Aguardando campo '{descricao}'...")
+    return wait.until(EC.presence_of_element_located((By.ID, id)))
+
 def preencher_input_por_id(descricao, element_id, texto):
     """Preenche um campo de input por ID."""
     try:
-        print(f"🕓 Aguardando campo '{descricao}'...")
-        input_element = wait.until(EC.visibility_of_element_located((By.ID, element_id)))
+        input_element = aguarda_por_id(descricao, element_id)
         input_element.clear()
         input_element.send_keys(texto)
         print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
@@ -45,8 +48,7 @@ def preencher_input_por_id(descricao, element_id, texto):
 def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, delay=1):
     """Seleciona uma opção visível em um <select> por ID."""
     try:
-        print(f"🕓 Aguardando campo '{descricao}'...")
-        wait.until(EC.visibility_of_element_located((By.ID, element_id)))
+        aguarda_por_id(descricao, element_id)
         print(f"✅ Campo '{descricao}' localizado.")
 
         for tentativa in range(tentativas):

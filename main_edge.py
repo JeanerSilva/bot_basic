@@ -1,21 +1,20 @@
+import os
+import re
+import time
+import subprocess
+
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import time
-import subprocess
-#from siop_utils import preencher_input_por_id, preenche_seletor_por_id
+
+import siop_utils
 from siop_utils import clicar_botao, aguarda_por_xpath
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
 from siop_utils import get_elemento, get_url
-
-import siop_utils
-
-import os
-import re
-import json
+#from siop_utils import preencher_input_por_id, preenche_seletor_por_id
 
 
 def finaliza_navegador():

@@ -1,10 +1,10 @@
 [
   {
     "atividade": "listar_programa",
-    "url": "https://www.siop.planejamento.gov.br/modulo/main/index.html#/1070"
+    "url": "/modulo/main/index.html#/1070"
   },
   {
     "atividade": "listar_objetivo_específico",
-    "url": "https://www.siop.planejamento.gov.br/modulo/main/index.html#/150"
+    "url": "/modulo/main/index.html#/150"
   }
 ]

@@ -49,7 +49,7 @@ def seleciona_ano_e_perfil():
 
 
 def listar_objetivo_específico(objetivo):  
-    driver.get(get_url("listar_objetivo_específico"))
+    driver.get(URL_BASE + get_url("listar_objetivo_específico"))
     seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
@@ -60,7 +60,7 @@ def listar_objetivo_específico(objetivo):
     clicar_botao("Procurar", "submit")    
 
 def listar_objetivos_específicos():  
-    driver.get(get_url("listar_objetivo_específico"))
+    driver.get(URL_BASE + get_url("listar_objetivo_específico"))
     seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
@@ -73,7 +73,7 @@ def exportar_objetivos_específicos():
     clicar_botao("Exportar...", "button") 
 
 def listar_programa(programa):  
-    driver.get(get_url("listar_programa"))
+    driver.get(URL_BASE + get_url("listar_programa"))
     seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
@@ -82,7 +82,7 @@ def listar_programa(programa):
     clicar_botao("Procurar", "submit")    
 
 def listar_programas():  
-    driver.get(get_url("listar_programa"))
+    driver.get(URL_BASE + get_url("listar_programa"))
     seleciona_ano_e_perfil()
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
@@ -108,12 +108,13 @@ def executa_tabela():
         time.sleep(1)
 
 def main():
-    global driver, wait, ano, perfil
+    global driver, wait, ano, perfil, URL_BASE
     driver = iniciar_driver()
     wait = WebDriverWait(driver, 120)   
     siop_utils.driver = driver
     siop_utils.wait = wait
     
+    URL_BASE = "https://www.siop.planejamento.gov.br"
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
@@ -136,6 +137,6 @@ if __name__ == "__main__":
     if resposta != 's':
         print("Operação cancelada pelo usuário.")
         sys.exit(0)
-        
+
     finaliza_navegador()
     main()

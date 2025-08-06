@@ -1,18 +1,47 @@
+from selenium import webdriver
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+import subprocess
+
 import time
 import json
 import os
 import pandas as pd
+from config import config
+import re
+
 
 driver = None
 wait = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def iniciar_driver():
+    global driver, wait
+
+    edge_options = Options()
+    edge_driver_path = config.DRIVER_DIR
+    print(f"Driver edge: {edge_driver_path}")
+    service = Service(
+        executable_path=config.DRIVER_DIR,
+        log_path="logs/edge_driver.log",  # opcional
+        service_args=["--verbose"],
+        creationflags=subprocess.CREATE_NO_WINDOW  # oculta janela do EdgeDriver
+    )
+
+    caminho = os.path.expandvars(config.EDGE_DIR)
+    caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho)
+    argumento = f'--user-data-dir={caminho_ajustado}'
+    edge_options.add_argument(argumento)
+    edge_options.add_argument('--profile-directory=Default')
+
+    driver = webdriver.Edge(service=service, options=edge_options)
+    return driver
 
 # Carrega os elementos do JSON uma vez
 with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8") as f:
@@ -113,7 +142,12 @@ def _registrar_erro(descricao, element_id):
 
 def aguarda_por_xpath(descricao, xpath):
     print(f"🕓 Aguardando campo '{descricao}'...")
-    return wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+    try:
+        return wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+    except TimeoutException:
+        print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
+        driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
+        raise
 
 def preencher_input_por_xpath(descricao, xpath, texto):
     aguarda_por_xpath(descricao, xpath)    

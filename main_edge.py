@@ -44,8 +44,11 @@ def iniciar_driver():
     return webdriver.Edge(service=service, options=edge_options)
 
 def seleciona_ano_e_perfil():
-    print(get_elemento_xpath("exercicio"))
+    xpath_exercicio = get_elemento_xpath("exercicio")
+    aguarda_por_xpath("Exercício", xpath_exercicio)
     preenche_seletor_por_xpath("Exercício", get_elemento_xpath("exercicio"), ano) 
+    xpath_perfil = get_elemento_xpath("perfil")
+    aguarda_por_xpath("Perfil", xpath_perfil)
     preenche_seletor_por_xpath("Perfil", get_elemento_xpath("perfil"), perfil) 
 
 
@@ -110,8 +113,8 @@ def executa_tabela():
 
 def main():
     global driver, wait, ano, perfil, URL_BASE
-    driver = iniciar_driver()
-    wait = WebDriverWait(driver, 120)   
+    driver = siop_utils.iniciar_driver()
+    wait = WebDriverWait(driver, 120)
     siop_utils.driver = driver
     siop_utils.wait = wait
     

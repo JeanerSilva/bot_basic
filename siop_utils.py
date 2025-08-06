@@ -7,12 +7,12 @@ import time
 import json
 import os
 import pandas as pd
-from config import config
 
 driver = None
 wait = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 # Carrega os elementos do JSON uma vez
 with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8") as f:
@@ -21,7 +21,21 @@ with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8"
 with open(os.path.join(BASE_DIR, "config/urls.json"), "r", encoding="utf-8") as f:
     _urls = json.load(f)
 
-def get_elemento(nome_item, tipo):
+def get_elemento_(nome_item, tipo):
+    for elem in _elementos:
+        if elem["item"] == nome_item:
+            return elem.get(tipo)
+    raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
+
+def get_elemento_xpath(nome_item):
+    tipo = "xpath"
+    for elem in _elementos:
+        if elem["item"] == nome_item:
+            return elem.get(tipo)
+    raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
+
+def get_elemento_id(nome_item):
+    tipo = "id"
     for elem in _elementos:
         if elem["item"] == nome_item:
             return elem.get(tipo)

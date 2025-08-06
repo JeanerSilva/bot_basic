@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import siop_utils
 from siop_utils import clicar_botao, aguarda_por_xpath
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
-from siop_utils import get_elemento, get_url, abrir_excel
+from siop_utils import get_elemento_xpath, get_url, abrir_excel
 #from siop_utils import preencher_input_por_id, preenche_seletor_por_id
 
 from config import config
@@ -44,9 +44,9 @@ def iniciar_driver():
     return webdriver.Edge(service=service, options=edge_options)
 
 def seleciona_ano_e_perfil():
-    print(get_elemento("exercicio", "xpath"))
-    preenche_seletor_por_xpath("Exercício", get_elemento("exercicio", "xpath"), ano) 
-    preenche_seletor_por_xpath("Perfil", get_elemento("perfil", "xpath"), perfil) 
+    print(get_elemento_xpath("exercicio"))
+    preenche_seletor_por_xpath("Exercício", get_elemento_xpath("exercicio"), ano) 
+    preenche_seletor_por_xpath("Perfil", get_elemento_xpath("perfil"), perfil) 
 
 
 def listar_objetivo_específico(objetivo):  
@@ -56,7 +56,7 @@ def listar_objetivo_específico(objetivo):
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Objetivo Específico",
-        get_elemento("ppa.objetivo_especifico.objetivo_especifico_input", "xpath"), objetivo
+        get_elemento_xpath("ppa.objetivo_especifico.objetivo_especifico_input"), objetivo
     )    
     clicar_botao("Procurar", "submit")    
 
@@ -70,7 +70,7 @@ def listar_objetivos_específicos():
 
 def exportar_objetivos_específicos():  
     listar_objetivos_específicos()
-    aguarda_por_xpath("Tabela Objetivos", get_elemento("tabela_resultados_objetivos_específicos", "xpath")) 
+    aguarda_por_xpath("Tabela Objetivos", get_elemento_xpath("tabela_resultados_objetivos_específicos")) 
     clicar_botao("Exportar...", "button") 
 
 def listar_programa(programa):  
@@ -79,7 +79,7 @@ def listar_programa(programa):
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
-    preencher_input_por_xpath("Programa", get_elemento("ppa.programa.programa_input", "xpath"), programa)    
+    preencher_input_por_xpath("Programa", get_elemento_xpath("ppa.programa.programa_input"), programa)    
     clicar_botao("Procurar", "submit")    
 
 def listar_programas():  
@@ -92,7 +92,7 @@ def listar_programas():
 
 def exportar_programas():  
     listar_programas()
-    aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
+    aguarda_por_xpath("Tabela Programas", get_elemento_xpath("tabela_resultados_programas")) 
     clicar_botao("Exportar...", "button") 
 
 def executa_tabela():
@@ -116,7 +116,7 @@ def main():
     siop_utils.wait = wait
     
     URL_BASE = config.URL_BASE_DIR
-    ano = config.ANO_PADRAO
+    ano = "2025"
     perfil = config.PERFIL_PADRAO
     
     #executa_tabela()   

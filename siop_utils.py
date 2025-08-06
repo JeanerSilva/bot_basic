@@ -6,9 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import SessionNotCreatedException
 
 import subprocess
-
 import time
 import json
 import os
@@ -22,12 +22,13 @@ wait = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def iniciar_driver():
+def iniciar_driver(tentativas=3, delay=5):
     global driver, wait
 
     edge_options = Options()
     edge_driver_path = config.DRIVER_DIR
     print(f"Driver edge: {edge_driver_path}")
+
     service = Service(
         executable_path=config.DRIVER_DIR,
         log_path="logs/edge_driver.log",  # opcional
@@ -41,8 +42,20 @@ def iniciar_driver():
     edge_options.add_argument(argumento)
     edge_options.add_argument(f'--profile-directory={config.PERFIL_EDGE_PADRAO}')
 
-    driver = webdriver.Edge(service=service, options=edge_options)
-    wait = WebDriverWait(driver, 120)
+    for tentativa in range(1, tentativas + 1):
+        try:
+            print(f"🚀 Tentativa {tentativa} de iniciar o Edge...")
+            driver = webdriver.Edge(service=service, options=edge_options)
+            wait = WebDriverWait(driver, 120)
+            print("✅ Edge iniciado com sucesso.")
+            return driver, wait
+        except SessionNotCreatedException as e:
+            print(f"❌ Erro ao iniciar Edge (tentativa {tentativa}): {e}")
+            time.sleep(delay)
+    
+    raise RuntimeError("❌ Falha ao iniciar o Edge após múltiplas tentativas.")
+
+
     return driver, wait
 
 # Carrega os elementos do JSON uma vez

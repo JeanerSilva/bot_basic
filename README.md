@@ -37,17 +37,13 @@ Resultado esperado:
 Perfil encontrado: Default
 ```
 
-Eventuais ajustes devem ser feitos no main_eddge.py nas seguintes linhas
+Eventuais ajustes devem ser feitos em config/config.py nas seguintes linhas
 
 ```python
-caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
-...    
-edge_options.add_argument('--profile-directory=Default')
+EDGE_DIR = r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data'
+PERFIL_PADRAO = "Default"
 ```
-
 A variável de sistema %LOCALAPPDATA% substitui "C:\\Users\\usuarioXXXXXXXX\\AppData\\Local"
-O perfil encontrado, caso não seja o Default, deve ser trocado na string '--profile-directory='
-
 
 ## Uso
 

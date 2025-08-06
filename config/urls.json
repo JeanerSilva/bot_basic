@@ -4,7 +4,35 @@
     "url": "/modulo/main/index.html#/1070"
   },
   {
+    "atividade": "ppa->objetivo_geral",
+    "url": "/modulo/main/index.html#/100291"
+  },
+  {
     "atividade": "ppa->objetivo_específico",
     "url": "/modulo/main/index.html#/150"
-  }
+  },
+  {
+    "atividade": "ppa->indicador_do_objetivo_específico",
+    "url": "/modulo/main/index.html#/100309"
+  },
+  {
+    "atividade": "ppa->meta_do_objetivo_específico",
+    "url": "/modulo/main/index.html#/100306"
+  },
+  {
+    "atividade": "ppa->entregas",
+    "url": "/modulo/main/index.html#/100292"
+  },
+  {
+    "atividade": "ppa->indicador_da_entrega",
+    "url": "/modulo/main/index.html#/100308"
+  },
+  {
+    "atividade": "ppa->meta_da_entrega",
+    "url": "/modulo/main/index.html#/100307"
+  },
+  {
+    "atividade": "ppa->medida_institucional_normativa",
+    "url": "/modulo/main/index.html#/1076"
+  } 
 ]

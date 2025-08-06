@@ -38,7 +38,7 @@ def iniciar_driver():
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho)
     argumento = f'--user-data-dir={caminho_ajustado}'
     edge_options.add_argument(argumento)
-    edge_options.add_argument('--profile-directory=Default')
+    edge_options.add_argument(f'--profile-directory={config.PERFIL_EDGE_PADRAO}')
 
     driver = webdriver.Edge(service=service, options=edge_options)
     return driver
@@ -170,24 +170,15 @@ def preencher_input_por_xpath(descricao, xpath, texto):
     except TimeoutException:
         _registrar_erro(descricao, xpath)
 
-def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=2, delay=1):
+def preenche_seletor_por_xpath(descricao, xpath, texto_visivel):
     try:
         aguarda_por_xpath(descricao, xpath)
         print(f"✅ Campo '{descricao}' localizado.")
-
-        for tentativa in range(tentativas):
-            try:
-                select_element = driver.find_element(By.XPATH, xpath)
-                Select(select_element).select_by_visible_text(texto_visivel)
-                print(f"✅ Opção '{texto_visivel}' selecionada no campo '{descricao}'.")
-                return
-            except StaleElementReferenceException:
-                print(f"⚠️ Tentativa {tentativa+1} falhou no campo '{descricao}' (stale). Retentando após {delay}s...")
-                time.sleep(delay)
-            except NoSuchElementException:
-                print(f"⚠️ Não foi encontrado o elemento {descricao}... com xpath {xpath}")
-
-        print(f"❌ Não foi possível selecionar '{texto_visivel}' em '{descricao}' após {tentativas} tentativas.")
+        select_element = driver.find_element(By.XPATH, xpath)
+        print(f"texto_visivel: {texto_visivel}")
+        Select(select_element).select_by_visible_text(texto_visivel)
+        print(f"✅ Opção '{texto_visivel}' selecionada no campo '{descricao}'.")
+        return    
     except TimeoutException:
         print(f"❌ Timeout ao localizar o campo '{descricao}'.")
         driver.save_screenshot(f"erro_{descricao.lower().replace(' ', '_')}.png")

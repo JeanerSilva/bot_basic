@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 
 import subprocess
 
@@ -41,7 +42,8 @@ def iniciar_driver():
     edge_options.add_argument(f'--profile-directory={config.PERFIL_EDGE_PADRAO}')
 
     driver = webdriver.Edge(service=service, options=edge_options)
-    return driver
+    wait = WebDriverWait(driver, 120)
+    return driver, wait
 
 # Carrega os elementos do JSON uma vez
 with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8") as f:

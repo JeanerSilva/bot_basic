@@ -2,8 +2,6 @@ import time
 import subprocess
 import sys
 
-from selenium.webdriver.support.ui import WebDriverWait
-
 import siop_utils
 from siop_utils import clicar_botao, aguarda_por_xpath
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
@@ -13,7 +11,6 @@ from siop_utils import acessa_url
 from config import config
 
 def finaliza_navegador():
-# Finaliza instâncias anteriores do Edge
     try:
         subprocess.run([
             "powershell", "-Command",
@@ -87,11 +84,9 @@ def executa_tabela():
         time.sleep(1)
 
 def main():
-    global driver, wait, ano, perfil, URL_BASE
-    driver = siop_utils.iniciar_driver()
-    wait = WebDriverWait(driver, 120)
-    siop_utils.driver = driver
-    siop_utils.wait = wait
+    global driver, wait, ano, perfil
+
+    siop_utils.driver, siop_utils.wait = siop_utils.iniciar_driver()
     
     ano = "2025"
     perfil = config.PERFIL_PADRAO

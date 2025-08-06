@@ -124,19 +124,16 @@ def main():
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
-    #executa_tabela ()   
-
+    #executa_tabela()   
     #listar_programas()
     #exportar_programas()
-
     #listar_objetivo_específico("0002")
-
-    #listar_objetivos_específicos()
-    exportar_objetivos_específicos()
+    listar_objetivos_específicos()
+    #exportar_objetivos_específicos()
     #time.sleep(5)
     #listar_programa("1144")
 
-    time.sleep(20)
+    time.sleep(5)
     driver.quit()
 
 if __name__ == "__main__":
@@ -149,6 +146,3 @@ if __name__ == "__main__":
     #    sys.exit(0)
     finaliza_navegador()
     main()
-    
-    #print(get_elemento("ppa.programa.programa_input", "xpath"))
-    #print(get_url("listar_objetivo_específico"))

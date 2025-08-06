@@ -67,3 +67,6 @@ Há um exemplo que lista um programa, limpa a tela e lista o próximo.
 Os programas estão no arquivo lista.xlsx, aba Plan1 e cabeçalho "Programa"
 
 
+## Acréscimos de novas funcionalidades
+
+Procurar o xpath de cada item

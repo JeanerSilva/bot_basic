@@ -1,0 +1,12 @@
+[
+  {
+    "item": "ppa.objetivo_especifico.objetivo_especifico_input",
+    "id": "form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:txtPesquisaObjetivoCodigo",
+    "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:txtPesquisaObjetivoCodigo']"
+  },
+  {
+    "item": "ppa.programa.programa_input",
+    "id": "form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo",
+    "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo']"
+  }
+]

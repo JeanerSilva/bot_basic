@@ -1,0 +1,13 @@
+Stop-Process -Name "msedge" -Force
+start msedge.exe --user-data-dir="C:\Users\1765 IRON\AppData\Local\Microsoft\Edge\User Data\selenium" --profile-directory=Default
+ 
+start msedge.exe --user-data-dir="C:\\Users\\1765 IRON\\AppData\\Local\\Microsoft\\Edge\\User Data\\selenium" --profile-directory=Default
+
+ start msedge.exe --user-data-dir="C:\Users\1765 IRON\AppData\Local\Microsoft\Edge\User Data\selenium" --profile-directory=Default
+
+
+
+ "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --user-data-dir="C:\Users\1765 IRON\AppData\Local\Microsoft\Edge\User Data\selenium" --profile-directory=Default
+
+
+ Stop-Process -Name "msedge" -Force -ErrorAction SilentlyContinue

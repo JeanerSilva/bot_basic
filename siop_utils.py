@@ -13,10 +13,10 @@ wait = None
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Carrega os elementos do JSON uma vez
-with open(os.path.join(BASE_DIR, "elementos.json"), "r", encoding="utf-8") as f:
+with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8") as f:
     _elementos = json.load(f)
 
-with open(os.path.join(BASE_DIR, "urls.json"), "r", encoding="utf-8") as f:
+with open(os.path.join(BASE_DIR, "config/urls.json"), "r", encoding="utf-8") as f:
     _urls = json.load(f)
 
 def get_elemento(nome_item, tipo):

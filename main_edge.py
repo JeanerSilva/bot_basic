@@ -103,7 +103,7 @@ def abrir_excel(arquivo, aba):
     return pd.read_excel(arquivo, sheet_name=aba)
 
 def executa_tabela():
-    arquivo = "lista.xlsx"
+    arquivo = "xls/lista.xlsx"
     aba = "Plan1"
     df = abrir_excel(arquivo, aba)
 

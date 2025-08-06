@@ -84,7 +84,7 @@ def get_url(atividade):
             return item["url"]
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
 
-def acessa_url(url):
+def acessa(url):
     driver.get(config.URL_BASE + get_url(url))
 
 def abrir_excel(arquivo, aba):
@@ -184,10 +184,10 @@ def seleciona_ano_e_perfil():
     xpath_exercicio = get_elemento("exercicio")
     aguarda_elemento("Exercício", xpath_exercicio)
     preenche_seletor("Exercício", xpath_exercicio, ano)
-
     xpath_perfil = get_elemento("perfil")
     aguarda_elemento("Perfil", xpath_perfil)
     preenche_seletor("Perfil", xpath_perfil, perfil)
+    navega_para_painel()    
 
 def aguardar_login_manual(timeout=1200):
     try:

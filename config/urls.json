@@ -1,10 +1,10 @@
 [
   {
-    "atividade": "listar_programa",
+    "atividade": "ppa->programa",
     "url": "/modulo/main/index.html#/1070"
   },
   {
-    "atividade": "listar_objetivo_específico",
+    "atividade": "ppa->objetivo_específico",
     "url": "/modulo/main/index.html#/150"
   }
 ]

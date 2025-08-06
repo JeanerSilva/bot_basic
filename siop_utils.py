@@ -4,8 +4,8 @@ from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, NoSuchElementException
+
 import subprocess
 
 import time
@@ -116,6 +116,8 @@ def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, 
             except StaleElementReferenceException:
                 print(f"⚠️ Tentativa {tentativa + 1} falhou (stale). Retentando após {delay}s...")
                 time.sleep(delay)
+            except NoSuchElementException:
+                print(f"⚠️ Não foi encontrado o {descricao}...")
 
         print(f"❌ Falha ao selecionar '{texto_visivel}' em '{descricao}' após {tentativas} tentativas.")
     except TimeoutException:
@@ -182,6 +184,8 @@ def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=2, de
             except StaleElementReferenceException:
                 print(f"⚠️ Tentativa {tentativa+1} falhou no campo '{descricao}' (stale). Retentando após {delay}s...")
                 time.sleep(delay)
+            except NoSuchElementException:
+                print(f"⚠️ Não foi encontrado o elemento {descricao}... com xpath {xpath}")
 
         print(f"❌ Não foi possível selecionar '{texto_visivel}' em '{descricao}' após {tentativas} tentativas.")
     except TimeoutException:

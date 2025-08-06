@@ -32,7 +32,7 @@ def seleciona_ano_e_perfil():
     preenche_seletor_por_xpath("Perfil", get_elemento_xpath("perfil"), perfil) 
 
 def listar_objetivo_específico(objetivo):  
-    acessa_url(get_url("listar_objetivo_específico"))
+    acessa_url(get_url("ppa->objetivo_específico"))
     seleciona_ano_e_perfil()
     muda_para_iframe()
     print("✅ Container principal carregado.")
@@ -42,7 +42,7 @@ def listar_objetivo_específico(objetivo):
     clicar_botao("Procurar", "submit")    
 
 def listar_objetivos_específicos():  
-    acessa_url(get_url("listar_objetivo_específico"))
+    acessa_url(get_url("ppa->objetivo_específico"))
     seleciona_ano_e_perfil()
     muda_para_iframe()
     print("✅ Container principal carregado.")
@@ -54,7 +54,7 @@ def exportar_objetivos_específicos():
     clicar_botao("Exportar...", "button") 
 
 def listar_programa(programa):  
-    acessa_url(get_url("listar_programa"))
+    acessa_url(get_url("ppa->programa"))
     seleciona_ano_e_perfil()
     muda_para_iframe()
     print("✅ Container principal carregado.")
@@ -62,7 +62,7 @@ def listar_programa(programa):
     clicar_botao("Procurar", "submit")    
 
 def listar_programas():  
-    acessa_url(get_url("listar_programa"))
+    acessa_url(get_url("ppa->programa"))
     seleciona_ano_e_perfil()
     muda_para_iframe()
     print("✅ Container principal carregado.")

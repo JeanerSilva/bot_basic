@@ -69,4 +69,9 @@ Os programas estão no arquivo lista.xlsx, aba Plan1 e cabeçalho "Programa"
 
 ## Acréscimos de novas funcionalidades
 
-Procurar o xpath de cada item
+Procurar o xpath de cada item e adicionar no arquivo elementos.json.
+Para acesso a outras urls, adicionar a url no arquivo urls.json
+
+No caso dos botões, deve-se saber o tipo e o valor.
+
+No caso de tabelas, deve-se pegar o xpath do /thead

@@ -13,10 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import siop_utils
 from siop_utils import clicar_botao, aguarda_por_xpath
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
-from siop_utils import get_elemento, get_url
+from siop_utils import get_elemento, get_url, abrir_excel
 #from siop_utils import preencher_input_por_id, preenche_seletor_por_id
-
-import pandas as pd
 
 def finaliza_navegador():
 # Finaliza instâncias anteriores do Edge
@@ -89,18 +87,11 @@ def listar_programas():
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
     clicar_botao("Procurar", "submit")            
-    aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
-    clicar_botao("Exportar...", "button") 
 
 def exportar_programas():  
     listar_programas()
     aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
     clicar_botao("Exportar...", "button") 
-
-
-def abrir_excel(arquivo, aba):
-    # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
-    return pd.read_excel(arquivo, sheet_name=aba)
 
 def executa_tabela():
     arquivo = "xls/lista.xlsx"
@@ -126,10 +117,10 @@ def main():
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
-    #executa_tabela()   
+    executa_tabela()   
     #listar_programas()
     #exportar_programas()
-    listar_objetivo_específico("0002")
+    #listar_objetivo_específico("0002")
     #listar_objetivos_específicos()
     #exportar_objetivos_específicos()
     #time.sleep(5)

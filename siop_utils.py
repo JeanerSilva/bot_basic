@@ -6,6 +6,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
 import json
 import os
+import pandas as pd
 
 driver = None
 wait = None
@@ -30,6 +31,10 @@ def get_url(atividade):
         if item["atividade"] == atividade:
             return item["url"]
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
+
+def abrir_excel(arquivo, aba):
+    # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
+    return pd.read_excel(arquivo, sheet_name=aba)
 
 def aguarda_por_id(descricao, id):
     print(f"🕓 Aguardando campo '{descricao}'...")

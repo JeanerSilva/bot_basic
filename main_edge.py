@@ -34,7 +34,6 @@ def iniciar_driver():
     edge_options = Options()
     edge_driver_path = r"C:\SEPLAN\selenium_siop-main\drivers\edge\msedgedriver.exe"
     service = Service(executable_path=edge_driver_path)
-    options = Options()
     caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho) 
     argumento = f'--user-data-dir={caminho_ajustado}'
@@ -78,6 +77,11 @@ def listar_programas(ano, perfil):
     aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
     clicar_botao("Exportar...", "button") 
 
+def exportar_programas(ano, perfil):  
+    listar_programas(ano, perfil)
+    aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
+    clicar_botao("Exportar...", "button") 
+
 
 def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
@@ -106,11 +110,12 @@ def main():
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
-    executa_tabela (ano, perfil)   
+    #executa_tabela (ano, perfil)   
 
     #listar_programas(ano, perfil)
+    #exportar_programas(ano, perfil)
 
-    #listar_objetivo_específico("0002", ano, perfil)
+    listar_objetivo_específico("0002", ano, perfil)
     #time.sleep(5)
     #listar_programa("1144", ano, perfil)
 

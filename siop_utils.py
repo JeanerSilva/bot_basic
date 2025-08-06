@@ -185,21 +185,32 @@ def preencher_input_por_xpath(descricao, xpath, texto):
     except TimeoutException:
         _registrar_erro(descricao, xpath)
 
-def preenche_seletor_por_xpath(descricao, xpath, texto_visivel):
-    try:
-        aguarda_por_xpath(descricao, xpath)
-        print(f"✅ Campo '{descricao}' localizado.")
-        select_element = driver.find_element(By.XPATH, xpath)
-        print(f"texto_visivel: {texto_visivel}")
-        Select(select_element).select_by_visible_text(texto_visivel)
-        print(f"✅ Opção '{texto_visivel}' selecionada no campo '{descricao}'.")
-        return    
-    except TimeoutException:
-        print(f"❌ Timeout ao localizar o campo '{descricao}'.")
-        driver.save_screenshot(f"erro_{descricao.lower().replace(' ', '_')}.png")
-        with open(f"erro_{descricao.lower().replace(' ', '_')}.html", "w", encoding="utf-8") as f:
-            f.write(driver.page_source)
-        raise
+def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=3, delay=2):
+    for tentativa in range(1, tentativas + 1):
+        try:
+            print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}'...")
+            aguarda_por_xpath(descricao, xpath)
+            print(f"✅ Campo '{descricao}' localizado.")
+            
+            select_element = driver.find_element(By.XPATH, xpath)
+            Select(select_element).select_by_visible_text(texto_visivel)
+            print(f"✅ Opção '{texto_visivel}' selecionada no campo '{descricao}'.")
+            return  # sucesso, sai da função
+        except (NoSuchElementException, StaleElementReferenceException) as e:
+            print(f"⚠️ Tentativa {tentativa} falhou ao preencher '{descricao}': {type(e).__name__}")
+            time.sleep(delay)
+        except TimeoutException:
+            print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
+            driver.save_screenshot(f"erro_{descricao.lower().replace(' ', '_')}.png")
+            with open(f"erro_{descricao.lower().replace(' ', '_')}.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            raise
+        except Exception as e:
+            print(f"❌ Erro inesperado na tentativa {tentativa} ao preencher '{descricao}': {e}")
+            time.sleep(delay)
+
+    raise RuntimeError(f"❌ Falha ao selecionar '{texto_visivel}' no campo '{descricao}' após {tentativas} tentativas.")
+
 
 def aguardar_login_manual(timeout=1200):
     try:

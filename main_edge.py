@@ -101,7 +101,7 @@ def main():
     #listar_programa("1144")
 
     time.sleep(5)
-    driver.quit()
+    siop_utils.driver.quit()
 
 if __name__ == "__main__":
     print ("Iniciando ...")

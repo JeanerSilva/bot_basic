@@ -20,6 +20,9 @@ import re
 driver = None
 wait = None
 
+ano = config.ANO_PADRAO
+perfil = config.PERFIL_PADRAO
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def iniciar_driver(tentativas=3, delay=5):
@@ -221,13 +224,14 @@ def finaliza_navegador():
     except subprocess.CalledProcessError:
         print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
 
-def seleciona_ano_e_perfil(ano, perfil):
+def seleciona_ano_e_perfil():
     xpath_exercicio = get_elemento_xpath("exercicio")
     aguarda_por_xpath("Exercício", xpath_exercicio)
-    preenche_seletor_por_xpath("Exercício", get_elemento_xpath("exercicio"), ano) 
+    preenche_seletor_por_xpath("Exercício", xpath_exercicio, ano)
+
     xpath_perfil = get_elemento_xpath("perfil")
     aguarda_por_xpath("Perfil", xpath_perfil)
-    preenche_seletor_por_xpath("Perfil", get_elemento_xpath("perfil"), perfil) 
+    preenche_seletor_por_xpath("Perfil", xpath_perfil, perfil)
 
 def aguardar_login_manual(timeout=1200):
     try:

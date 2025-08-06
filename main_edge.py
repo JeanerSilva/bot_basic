@@ -7,9 +7,10 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import subprocess
 #from siop_utils import preencher_input_por_id, preenche_seletor_por_id
-from siop_utils import clicar_botao
+from siop_utils import clicar_botao, aguarda_por_xpath
 from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
 from siop_utils import get_elemento, get_url
+
 import siop_utils
 
 import os
@@ -56,7 +57,7 @@ def listar_objetivo_específico(objetivo, ano, perfil):
     preencher_input_por_xpath("Objetivo Específico",
         get_elemento("ppa.objetivo_especifico.objetivo_especifico_input", "xpath"), objetivo
     )    
-    clicar_botao(texto="Procurar")    
+    clicar_botao("Procurar", "submit")    
 
 def listar_programa(programa, ano, perfil):  
     driver.get(get_url("listar_programa"))
@@ -65,7 +66,17 @@ def listar_programa(programa, ano, perfil):
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Programa", get_elemento("ppa.programa.programa_input", "xpath"), programa)    
-    clicar_botao(texto="Procurar")    
+    clicar_botao("Procurar", "input")    
+
+def listar_programas(ano, perfil):  
+    driver.get(get_url("listar_programa"))
+    seleciona_ano_e_perfil(ano, perfil)
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
+    driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
+    print("✅ Container principal carregado.")
+    clicar_botao("Procurar", "submit")            
+    aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
+    clicar_botao("Exportar...", "button") 
 
 def main():
     global driver, wait
@@ -76,16 +87,18 @@ def main():
 
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
-      
-    listar_objetivo_específico("0002", ano, perfil)
-    time.sleep(5)
-    listar_programa("1144", ano, perfil)
+    
+    listar_programas(ano, perfil)
 
-    time.sleep(5)
+    #listar_objetivo_específico("0002", ano, perfil)
+    #time.sleep(5)
+    #listar_programa("1144", ano, perfil)
+
+    time.sleep(20)
     driver.quit()
 
 if __name__ == "__main__":
-    print ("iniciando")
+    print ("Iniciando...")
 
     #resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
 

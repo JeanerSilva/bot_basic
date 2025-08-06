@@ -63,12 +63,12 @@ def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, 
     except TimeoutException:
         _registrar_erro(descricao, element_id)
 
-def clicar_botao(texto):
+def clicar_botao(texto, type):
     try:
         print(f"🕓 Aguardando botão '{texto}'...")
         botao = wait.until(
             EC.visibility_of_element_located(
-                (By.XPATH, f'//input[@type="submit" and @value="{texto}"]')
+                (By.XPATH, f'//input[@type="{type}" and @value="{texto}"]')
             )
         )
         try:
@@ -89,9 +89,12 @@ def _registrar_erro(descricao, element_id):
         f.write(driver.page_source)
     raise TimeoutException(f"Campo '{descricao}' com id='{element_id}' não encontrado.")
 
-def preencher_input_por_xpath(descricao, xpath, texto):
+def aguarda_por_xpath(descricao, xpath):
     print(f"🕓 Aguardando campo '{descricao}'...")
-    wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+    return wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+
+def preencher_input_por_xpath(descricao, xpath, texto):
+    aguarda_por_xpath(descricao, xpath)    
     print(f"✅ Campo '{descricao}' localizado.")
     try:
         print(f"🕓 Aguardando campo '{descricao}'...")
@@ -104,8 +107,7 @@ def preencher_input_por_xpath(descricao, xpath, texto):
 
 def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=2, delay=1):
     try:
-        print(f"🕓 Aguardando campo '{descricao}'...")
-        wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        aguarda_por_xpath(descricao, xpath)
         print(f"✅ Campo '{descricao}' localizado.")
 
         for tentativa in range(tentativas):

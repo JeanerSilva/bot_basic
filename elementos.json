@@ -18,5 +18,11 @@
     "item": "perfil",
     "id": "",
     "xpath": "//label[contains(text(), \"Perfil\")]/following-sibling::div/select"
+  },
+  {
+    "item": "tabela_resultados_programas",
+    "id": "",
+    "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaPrograma:tblProgramas\"]/thead/tr[1]"
   }
 ]
+

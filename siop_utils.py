@@ -211,6 +211,23 @@ def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=3, de
 
     raise RuntimeError(f"❌ Falha ao selecionar '{texto_visivel}' no campo '{descricao}' após {tentativas} tentativas.")
 
+def finaliza_navegador():
+    try:
+        subprocess.run([
+            "powershell", "-Command",
+            "Stop-Process -Name 'msedge' -Force -ErrorAction SilentlyContinue"
+        ], check=True)
+        print("🧹 Edge encerrado com sucesso antes da execução.")
+    except subprocess.CalledProcessError:
+        print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
+
+def seleciona_ano_e_perfil():
+    xpath_exercicio = get_elemento_xpath("exercicio")
+    aguarda_por_xpath("Exercício", xpath_exercicio)
+    preenche_seletor_por_xpath("Exercício", get_elemento_xpath("exercicio"), ano) 
+    xpath_perfil = get_elemento_xpath("perfil")
+    aguarda_por_xpath("Perfil", xpath_perfil)
+    preenche_seletor_por_xpath("Perfil", get_elemento_xpath("perfil"), perfil) 
 
 def aguardar_login_manual(timeout=1200):
     try:

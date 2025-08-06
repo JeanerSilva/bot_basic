@@ -95,7 +95,7 @@ def get_url(atividade):
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
 
 def acessa_url(url):
-    driver.get(config.URL_BASE + url)
+    driver.get(config.URL_BASE + get_url(url))
 
 def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
@@ -177,6 +177,7 @@ def aguarda_por_xpath(descricao, xpath):
         raise
 
 def preencher_input_por_xpath(descricao, xpath, texto):
+    xpath = get_elemento_xpath(xpath)
     aguarda_por_xpath(descricao, xpath)    
     print(f"✅ Campo '{descricao}' localizado.")
     try:

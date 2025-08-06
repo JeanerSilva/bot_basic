@@ -17,6 +17,8 @@ from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
 from siop_utils import get_elemento, get_url, abrir_excel
 #from siop_utils import preencher_input_por_id, preenche_seletor_por_id
 
+from config import config
+
 def finaliza_navegador():
 # Finaliza instâncias anteriores do Edge
     try:
@@ -30,12 +32,11 @@ def finaliza_navegador():
 
 
 def iniciar_driver():
-    edge_options = Options()
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    edge_driver_path = BASE_DIR + r"\drivers\edge\msedgedriver.exe"
+    edge_options = Options()    
+    edge_driver_path = config.DRIVER_DIR
     print(f"Buscando edge_driver em : {edge_driver_path}")
     service = Service(executable_path=edge_driver_path)
-    caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
+    caminho = os.path.expandvars(config.EDGE_DIR)
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho) 
     argumento = f'--user-data-dir={caminho_ajustado}'
     edge_options.add_argument(argumento)
@@ -114,14 +115,14 @@ def main():
     siop_utils.driver = driver
     siop_utils.wait = wait
     
-    URL_BASE = "https://www.siop.planejamento.gov.br"
-    ano = "2025"
-    perfil = "Controle de Qualidade - SEPLAN"
+    URL_BASE = config.URL_BASE_DIR
+    ano = config.ANO_PADRAO
+    perfil = config.PERFIL_PADRAO
     
-    executa_tabela()   
+    #executa_tabela()   
     #listar_programas()
     #exportar_programas()
-    #listar_objetivo_específico("0002")
+    listar_objetivo_específico("0002")
     #listar_objetivos_específicos()
     #exportar_objetivos_específicos()
     #time.sleep(5)

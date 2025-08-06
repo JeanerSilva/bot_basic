@@ -7,6 +7,7 @@ import time
 import json
 import os
 import pandas as pd
+from config import config
 
 driver = None
 wait = None

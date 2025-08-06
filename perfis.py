@@ -1,17 +1,15 @@
 import os
 import re
+from config import config
 
 def listar_caminho():
-    caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
-    #caminho = os.path.expandvars(r'%LOCALAPPDATA%\\Google\\Chrome\\User Data')
+    caminho = os.path.expandvars(config.EDGE_DIR)  
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho) 
-    argumento = f'--user-data-dir={caminho_ajustado}'
-    
+    argumento = f'--user-data-dir={caminho_ajustado}'    
     return argumento
 
 def listar_perfis_edge():
-    caminho_base = os.path.expandvars(r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data')
-    #caminho_base = os.path.expandvars(r'%LOCALAPPDATA%\\Google\\Chrome\\User Data')
+    caminho_base = os.path.expandvars(config.EDGE_DIR)  
     perfis = []
 
     if os.path.exists(caminho_base):
@@ -25,7 +23,7 @@ def listar_perfis_edge():
     return perfis
 
 # Exemplo de uso
-print(listar_caminho())
+print(f"Caminho edge: {listar_caminho()}")
 
 for perfil in listar_perfis_edge():
     print("Perfil encontrado:", perfil)

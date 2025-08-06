@@ -7,26 +7,34 @@ Use esta aplicação para acessar o SIOP de forma automatizada.
 Com o python instalado, crie o ambiente virtual:
 
 ```shell
-    python -m venv .venv
+python -m venv .venv
 ```
 
 Após, instale as bibliotecas necessárias
 
 ```shell
-    pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Acesse o ambiente virtual:
 
 ```shell
-    .venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
+## Uso
+
 Edite o main.py para executar as funcionalidades necessárias.
+
+O sistema usa o Microsoft Edge, que será fechado toda vez que a aplicação for usada.
+
+O login no SIOP deve ser feito antes da execução do programa.
+
+Todas as ações serão feitas em nome do usuário logado.
 
 ## Trabalho com atividades sequenciais
 
 Há um exemplo que lista um programa, limpa a tela e lista o próximo.
-Os programas estão no arquivo lista.xlsx, aba Plan1 e cabeçalho "Programa
+Os programas estão no arquivo lista.xlsx, aba Plan1 e cabeçalho "Programa"
 
 

@@ -110,7 +110,7 @@ def executa_tabela():
     print(df.head())
     for programa in df["Programa"]:
         print(programa)
-        listar_programa("1144")
+        listar_programa(programa)
         time.sleep(1)
         clicar_botao("Limpar", "submit")    
         time.sleep(1)

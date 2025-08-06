@@ -56,10 +56,7 @@ def iniciar_driver(tentativas=3, delay=5):
             print(f"❌ Erro ao iniciar Edge (tentativa {tentativa}): {e}")
             time.sleep(delay)
     
-    raise RuntimeError("❌ Falha ao iniciar o Edge após múltiplas tentativas.")
-
-
-    return driver, wait
+    raise RuntimeError("❌ Falha ao iniciar o Edge após múltiplas tentativas.")    
 
 # Carrega os elementos do JSON uma vez
 with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8") as f:
@@ -74,15 +71,8 @@ def get_elemento_(nome_item, tipo):
             return elem.get(tipo)
     raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
 
-def get_elemento_xpath(nome_item):
+def get_elemento(nome_item):
     tipo = "xpath"
-    for elem in _elementos:
-        if elem["item"] == nome_item:
-            return elem.get(tipo)
-    raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
-
-def get_elemento_id(nome_item):
-    tipo = "id"
     for elem in _elementos:
         if elem["item"] == nome_item:
             return elem.get(tipo)
@@ -101,47 +91,11 @@ def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
     return pd.read_excel(arquivo, sheet_name=aba)
 
-def aguarda_por_id(descricao, id):
-    print(f"🕓 Aguardando campo '{descricao}'...")
-    return wait.until(EC.presence_of_element_located((By.ID, id)))
-
 def muda_para_iframe():
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
 
-def preencher_input_por_id(descricao, element_id, texto):
-    """Preenche um campo de input por ID."""
-    try:
-        input_element = aguarda_por_id(descricao, element_id)
-        input_element.clear()
-        input_element.send_keys(texto)
-        print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
-    except TimeoutException:
-        _registrar_erro(descricao, element_id)
-
-def preenche_seletor_por_id(descricao, element_id, texto_visivel, tentativas=2, delay=1):
-    """Seleciona uma opção visível em um <select> por ID."""
-    try:
-        aguarda_por_id(descricao, element_id)
-        print(f"✅ Campo '{descricao}' localizado.")
-
-        for tentativa in range(tentativas):
-            try:
-                select_element = driver.find_element(By.ID, element_id)
-                Select(select_element).select_by_visible_text(texto_visivel)
-                print(f"✅ Opção '{texto_visivel}' selecionada no campo '{descricao}'.")
-                return
-            except StaleElementReferenceException:
-                print(f"⚠️ Tentativa {tentativa + 1} falhou (stale). Retentando após {delay}s...")
-                time.sleep(delay)
-            except NoSuchElementException:
-                print(f"⚠️ Não foi encontrado o {descricao}...")
-
-        print(f"❌ Falha ao selecionar '{texto_visivel}' em '{descricao}' após {tentativas} tentativas.")
-    except TimeoutException:
-        _registrar_erro(descricao, element_id)
-
-def clicar_botao(texto, type):
+def clica_botao(texto, type):
     try:
         print(f"🕓 Aguardando botão '{texto}'...")
         botao = wait.until(
@@ -167,7 +121,7 @@ def _registrar_erro(descricao, element_id):
         f.write(driver.page_source)
     raise TimeoutException(f"Campo '{descricao}' com id='{element_id}' não encontrado.")
 
-def aguarda_por_xpath(descricao, xpath):
+def aguarda_elemento(descricao, xpath):
     print(f"🕓 Aguardando campo '{descricao}'...")
     try:
         return wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -176,9 +130,9 @@ def aguarda_por_xpath(descricao, xpath):
         driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
         raise
 
-def preencher_input_por_xpath(descricao, xpath, texto):
-    xpath = get_elemento_xpath(xpath)
-    aguarda_por_xpath(descricao, xpath)    
+def preenche_input(descricao, xpath, texto):
+    xpath = get_elemento(xpath)
+    aguarda_elemento(descricao, xpath)    
     print(f"✅ Campo '{descricao}' localizado.")
     try:
         print(f"🕓 Aguardando campo '{descricao}'...")
@@ -189,11 +143,11 @@ def preencher_input_por_xpath(descricao, xpath, texto):
     except TimeoutException:
         _registrar_erro(descricao, xpath)
 
-def preenche_seletor_por_xpath(descricao, xpath, texto_visivel, tentativas=3, delay=2):
+def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
     for tentativa in range(1, tentativas + 1):
         try:
             print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}'...")
-            aguarda_por_xpath(descricao, xpath)
+            aguarda_elemento(descricao, xpath)
             print(f"✅ Campo '{descricao}' localizado.")
             
             select_element = driver.find_element(By.XPATH, xpath)
@@ -226,13 +180,13 @@ def finaliza_navegador():
         print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
 
 def seleciona_ano_e_perfil():
-    xpath_exercicio = get_elemento_xpath("exercicio")
-    aguarda_por_xpath("Exercício", xpath_exercicio)
-    preenche_seletor_por_xpath("Exercício", xpath_exercicio, ano)
+    xpath_exercicio = get_elemento("exercicio")
+    aguarda_elemento("Exercício", xpath_exercicio)
+    preenche_seletor("Exercício", xpath_exercicio, ano)
 
-    xpath_perfil = get_elemento_xpath("perfil")
-    aguarda_por_xpath("Perfil", xpath_perfil)
-    preenche_seletor_por_xpath("Perfil", xpath_perfil, perfil)
+    xpath_perfil = get_elemento("perfil")
+    aguarda_elemento("Perfil", xpath_perfil)
+    preenche_seletor("Perfil", xpath_perfil, perfil)
 
 def aguardar_login_manual(timeout=1200):
     try:

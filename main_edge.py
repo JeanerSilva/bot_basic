@@ -1,45 +1,45 @@
 import time
 import siop_utils as sb #siop_bot
 
-def listar_objetivo_específico(objetivo):  
+def lista_objetivo_específico(objetivo):  
     sb.acessa_url("ppa->objetivo_específico")
     sb.seleciona_ano_e_perfil()
     sb.muda_para_iframe()
     print("✅ Container principal carregado.")
-    sb.preencher_input_por_xpath("Objetivo Específico", "ppa.objetivo_especifico.objetivo_especifico_input", objetivo)    
-    sb.clicar_botao("Procurar", "submit")    
+    sb.preenche_input("Objetivo Específico", "ppa.objetivo_especifico.objetivo_especifico_input", objetivo)    
+    sb.clica_botao("Procurar", "submit")    
 
-def listar_objetivos_específicos():  
+def lista_objetivos_específicos():  
     sb.acessa_url("ppa->objetivo_específico")
     sb.seleciona_ano_e_perfil()
     sb.muda_para_iframe()
     print("✅ Container principal carregado.")
-    sb.clicar_botao("Procurar", "submit")  
+    sb.clica_botao("Procurar", "submit")  
 
-def exportar_objetivos_específicos():  
-    listar_objetivos_específicos()
-    sb.aguarda_por_xpath("Tabela Objetivos", "tabela_resultados_objetivos_específicos") 
-    sb.clicar_botao("Exportar...", "button") 
+def exporta_objetivos_específicos():  
+    lista_objetivos_específicos()
+    sb.aguarda_elemento("Tabela Objetivos", "tabela_resultados_objetivos_específicos") 
+    sb.clica_botao("Exportar...", "button") 
 
-def listar_programa(programa):  
+def lista_programa(programa):  
     sb.acessa_url("ppa->programa")
     sb.seleciona_ano_e_perfil()
     sb.muda_para_iframe()
     print("✅ Container principal carregado.")
-    sb.preencher_input_por_xpath("Programa", "ppa.programa.programa_input", programa)    
-    sb.clicar_botao("Procurar", "submit")    
+    sb.preenche_input("Programa", "ppa.programa.programa_input", programa)    
+    sb.clica_botao("Procurar", "submit")    
 
-def listar_programas():  
+def lista_programas():  
     sb.acessa_url("ppa->programa")
     sb.seleciona_ano_e_perfil()
     sb.muda_para_iframe()
     print("✅ Container principal carregado.")
-    sb.clicar_botao("Procurar", "submit")            
+    sb.clica_botao("Procurar", "submit")            
 
-def exportar_programas():  
-    listar_programas()
-    sb.aguarda_por_xpath("Tabela Programas", "tabela_resultados_programas")
-    sb.clicar_botao("Exportar...", "button") 
+def exporta_programas():  
+    lista_programas()
+    sb.aguarda_elemento("Tabela Programas", "tabela_resultados_programas")
+    sb.clica_botao("Exportar...", "button") 
 
 def executa_tabela():
     arquivo = "xls/lista.xlsx"
@@ -49,9 +49,9 @@ def executa_tabela():
     print(df.head())
     for programa in df["Programa"]:
         print(programa)
-        listar_programa(programa)
+        lista_programa(programa)
         time.sleep(1)
-        sb.clicar_botao("Limpar", "submit")    
+        sb.clica_botao("Limpar", "submit")    
         time.sleep(1)
 
 def main():
@@ -60,15 +60,14 @@ def main():
     sb.ano = "2025"
    
     #executa_tabela()   
-    listar_programas()
-    #exportar_programas()
-    #listar_objetivo_específico("0002")
-    #listar_objetivos_específicos()
-    #exportar_objetivos_específicos()
-    #time.sleep(5)
-    #listar_programa("1144")
+    lista_programas()
+    #exporta_programas()
+    #lista_objetivo_específico("0002")
+    #lista_objetivos_específicos()
+    #exporta_objetivos_específicos()
+    #lista_programa("1144")
 
-    time.sleep(5)
+    time.sleep(2)
     sb.driver.quit()
 
 if __name__ == "__main__":

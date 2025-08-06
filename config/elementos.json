@@ -1,32 +1,26 @@
 [
   {
     "item": "ppa.objetivo_especifico.objetivo_especifico_input",
-    "id": "form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:txtPesquisaObjetivoCodigo",
     "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:txtPesquisaObjetivoCodigo']"
   },
   {
     "item": "ppa.programa.programa_input",
-    "id": "form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo",
     "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo']"
   },
   {
     "item": "exercicio",
-    "id": "",
     "xpath": "//label[contains(text(), \"Exercício\")]/following-sibling::div/select"
   },
   {
     "item": "perfil",
-    "id": "",
     "xpath": "//label[contains(text(), \"Perfil\")]/following-sibling::div/select"
   },
   {
     "item": "tabela_resultados_programas",
-    "id": "",
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaPrograma:tblProgramas\"]/thead/tr[1]"
   },
   {
     "item": "tabela_resultados_objetivos_específicos",
-    "id": "",
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:tblObjetivosEspecificos\"]/thead"
   }
 ]

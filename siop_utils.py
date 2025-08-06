@@ -76,6 +76,9 @@ def get_url(atividade):
             return item["url"]
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
 
+def acessa_url(url):
+    driver.get(config.URL_BASE + url)
+
 def abrir_excel(arquivo, aba):
     # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
     return pd.read_excel(arquivo, sheet_name=aba)
@@ -83,6 +86,10 @@ def abrir_excel(arquivo, aba):
 def aguarda_por_id(descricao, id):
     print(f"🕓 Aguardando campo '{descricao}'...")
     return wait.until(EC.presence_of_element_located((By.ID, id)))
+
+def muda_para_iframe():
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
+    driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
 
 def preencher_input_por_id(descricao, element_id, texto):
     """Preenche um campo de input por ID."""

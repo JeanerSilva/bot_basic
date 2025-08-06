@@ -1,5 +1,5 @@
 from pathlib import Path
-URL_BASE_DIR = "https://www.siop.planejamento.gov.br"
+URL_BASE = "https://www.siop.planejamento.gov.br"
 PERFIL_PADRAO = "Controle de Qualidade - SEPLAN"
 ANO_PADRAO = "2025"
 EDGE_DIR = r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data'

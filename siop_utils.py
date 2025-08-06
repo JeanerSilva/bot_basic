@@ -221,7 +221,7 @@ def finaliza_navegador():
     except subprocess.CalledProcessError:
         print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
 
-def seleciona_ano_e_perfil():
+def seleciona_ano_e_perfil(ano, perfil):
     xpath_exercicio = get_elemento_xpath("exercicio")
     aguarda_por_xpath("Exercício", xpath_exercicio)
     preenche_seletor_por_xpath("Exercício", get_elemento_xpath("exercicio"), ano) 

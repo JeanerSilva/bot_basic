@@ -1,6 +1,4 @@
 import time
-import subprocess
-import sys
 
 import siop_utils
 from siop_utils import clicar_botao, aguarda_por_xpath
@@ -12,7 +10,7 @@ from config import config
 
 def listar_objetivo_específico(objetivo):  
     acessa_url(get_url("ppa->objetivo_específico"))
-    seleciona_ano_e_perfil()
+    seleciona_ano_e_perfil(ano, perfil)
     muda_para_iframe()
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Objetivo Específico",
@@ -22,7 +20,7 @@ def listar_objetivo_específico(objetivo):
 
 def listar_objetivos_específicos():  
     acessa_url(get_url("ppa->objetivo_específico"))
-    seleciona_ano_e_perfil()
+    seleciona_ano_e_perfil(ano, perfil)
     muda_para_iframe()
     print("✅ Container principal carregado.")
     clicar_botao("Procurar", "submit")  
@@ -34,7 +32,7 @@ def exportar_objetivos_específicos():
 
 def listar_programa(programa):  
     acessa_url(get_url("ppa->programa"))
-    seleciona_ano_e_perfil()
+    seleciona_ano_e_perfil(ano, perfil)
     muda_para_iframe()
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Programa", get_elemento_xpath("ppa.programa.programa_input"), programa)    
@@ -42,7 +40,7 @@ def listar_programa(programa):
 
 def listar_programas():  
     acessa_url(get_url("ppa->programa"))
-    seleciona_ano_e_perfil()
+    seleciona_ano_e_perfil(ano, perfil)
     muda_para_iframe()
     print("✅ Container principal carregado.")
     clicar_botao("Procurar", "submit")            
@@ -89,7 +87,6 @@ if __name__ == "__main__":
     resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
     if resposta != 's':
         print("Operação cancelada pelo usuário.")
-        sys.exit(0)
-
-    finaliza_navegador()
-    main()
+    else:    
+        finaliza_navegador()
+        main()

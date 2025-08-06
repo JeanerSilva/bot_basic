@@ -16,6 +16,7 @@ from siop_utils import preenche_seletor_por_xpath, preencher_input_por_xpath
 from siop_utils import get_elemento, get_url
 #from siop_utils import preencher_input_por_id, preenche_seletor_por_id
 
+import pandas as pd
 
 def finaliza_navegador():
 # Finaliza instâncias anteriores do Edge
@@ -65,7 +66,7 @@ def listar_programa(programa, ano, perfil):
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
     preencher_input_por_xpath("Programa", get_elemento("ppa.programa.programa_input", "xpath"), programa)    
-    clicar_botao("Procurar", "input")    
+    clicar_botao("Procurar", "submit")    
 
 def listar_programas(ano, perfil):  
     driver.get(get_url("listar_programa"))
@@ -77,6 +78,24 @@ def listar_programas(ano, perfil):
     aguarda_por_xpath("Tabela Programas", get_elemento("tabela_resultados_programas", "xpath")) 
     clicar_botao("Exportar...", "button") 
 
+
+def abrir_excel(arquivo, aba):
+    # pd.read_excel(arquivo,sheet_name="Nome_da_Aba")
+    return pd.read_excel(arquivo, sheet_name=aba)
+
+def executa_tabela(ano, perfil):
+    arquivo = "lista.xlsx"
+    aba = "Plan1"
+    df = abrir_excel(arquivo, aba)
+
+    print(df.head())
+    for programa in df["Programa"]:
+        print(programa)
+        listar_programa("1144", ano, perfil)
+        time.sleep(1)
+        clicar_botao("Limpar", "submit")    
+        time.sleep(1)
+
 def main():
     global driver, wait
     driver = iniciar_driver()
@@ -87,7 +106,9 @@ def main():
     ano = "2025"
     perfil = "Controle de Qualidade - SEPLAN"
     
-    listar_programas(ano, perfil)
+    executa_tabela (ano, perfil)   
+
+    #listar_programas(ano, perfil)
 
     #listar_objetivo_específico("0002", ano, perfil)
     #time.sleep(5)

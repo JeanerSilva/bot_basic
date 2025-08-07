@@ -23,6 +23,8 @@ wait = None
 ano = config.ANO_PADRAO
 perfil = config.PERFIL_PADRAO
 
+jquery = True
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def iniciar_driver(tentativas=3, delay=5):
@@ -65,18 +67,12 @@ with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8"
 with open(os.path.join(BASE_DIR, "config/urls.json"), "r", encoding="utf-8") as f:
     _urls = json.load(f)
 
-def get_elemento_(nome_item, tipo):
-    for elem in _elementos:
-        if elem["item"] == nome_item:
-            return elem.get(tipo)
-    raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
-
-def get_elemento(nome_item):
+def get_xpath_elemento(elemento):
     tipo = "xpath"
     for elem in _elementos:
-        if elem["item"] == nome_item:
+        if elem["item"] == elemento:
             return elem.get(tipo)
-    raise ValueError(f"Elemento '{nome_item}' com tipo '{tipo}' não encontrado.")
+    raise ValueError(f"Elemento '{elemento}' com tipo '{tipo}' não encontrado.")
 
 def get_url(atividade):
     for item in _urls:
@@ -122,18 +118,65 @@ def _registrar_erro(descricao, element_id):
         f.write(driver.page_source)
     raise TimeoutException(f"Campo '{descricao}' com id='{element_id}' não encontrado.")
 
-def aguarda_elemento(descricao, xpath):
+def aguarda_dom(timeout=10):
+    print("🕓 Aguardando document.readyState = 'complete'...")
+    for _ in range(timeout * 2):  # verifica a cada 0.5s
+        try:
+            pronto = driver.execute_script("return document.readyState === 'complete';")
+            if pronto:
+                print("✅ DOM completamente carregado.")
+                return
+        except Exception as e:
+            print(f"⚠️ Erro ao verificar readyState (ignorado): {e}")
+        time.sleep(0.5)
+    print("⚠️ DOM não ficou pronto após timeout.")
+
+
+def aguarda_jquery(timeout=10):
+    print("🕓 Aguardando jQuery ficar inativo ou ausente...")
+    for i in range(timeout * 2):  # verifica a cada 0.5s
+        try:
+            pronto = driver.execute_script("""
+                return (
+                    typeof jQuery === 'undefined' || 
+                    (typeof jQuery.active !== 'undefined' && jQuery.active === 0)
+                );
+            """)
+            if pronto:
+                print("✅ jQuery ausente ou inativo.")
+                return
+        except Exception as e:
+            print(f"⚠️ Erro ao verificar jQuery (ignorado): {e}")
+        time.sleep(0.5)
+    print("⚠️ jQuery ainda ativo (ou script falhou) após timeout.")
+
+def aguarda_elemento(descricao, xpath, jquery):
     print(f"🕓 Aguardando campo '{descricao}'...")
     try:
-        return wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        elemento = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        if jquery:
+            aguarda_jquery()  # nova adição
+        else:
+            aguarda_dom()
+        print(f"✅ Campo '{descricao}' carregado e jQuery inativo.")
+        return elemento
     except TimeoutException:
         print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
         driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
         raise
 
-def preenche_input(descricao, xpath, texto):
-    xpath = get_elemento(xpath)
-    aguarda_elemento(descricao, xpath)    
+def clicar_link(descricao, elemento):
+    xpath = get_xpath_elemento(elemento)
+    try:
+        elemento = aguarda_elemento(descricao, xpath, jquery)  
+        elemento.click()
+        print("✅ Link clicado com sucesso.")
+    except Exception as e:
+        print(f"❌ Erro ao clicar no link: {e}")
+
+def preenche_input(descricao, elemento, texto):
+    xpath = get_xpath_elemento(elemento)
+    aguarda_elemento(descricao, xpath, jquery)    
     print(f"✅ Campo '{descricao}' localizado.")
     try:
         print(f"🕓 Aguardando campo '{descricao}'...")
@@ -148,7 +191,7 @@ def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
     for tentativa in range(1, tentativas + 1):
         try:
             print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}'...")
-            aguarda_elemento(descricao, xpath)
+            aguarda_elemento(descricao, xpath, jquery)
             print(f"✅ Campo '{descricao}' localizado.")
             
             select_element = driver.find_element(By.XPATH, xpath)
@@ -180,12 +223,12 @@ def finaliza_navegador():
     except subprocess.CalledProcessError:
         print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
 
-def seleciona_ano_e_perfil():
-    xpath_exercicio = get_elemento("exercicio")
-    aguarda_elemento("Exercício", xpath_exercicio)
+def seleciona_ano_e_perfil_e_muda_de_frame():
+    xpath_exercicio = get_xpath_elemento("exercicio")
+    aguarda_elemento("Exercício", xpath_exercicio, jquery)
     preenche_seletor("Exercício", xpath_exercicio, ano)
-    xpath_perfil = get_elemento("perfil")
-    aguarda_elemento("Perfil", xpath_perfil)
+    xpath_perfil = get_xpath_elemento("perfil")
+    aguarda_elemento("Perfil", xpath_perfil, jquery)
     preenche_seletor("Perfil", xpath_perfil, perfil)
     navega_para_painel()    
 

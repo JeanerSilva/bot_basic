@@ -6,3 +6,4 @@ PERFIL_EDGE_PADRAO = "Default"
 EDGE_DIR = r'%LOCALAPPDATA%\\Microsoft\\Edge\\User Data'
 BASE_DIR = BASE_DIR = Path(__file__).resolve().parent.parent
 DRIVER_DIR = BASE_DIR / "drivers" / "edge" / "msedgedriver.exe"
+JQUERY = True

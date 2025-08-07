@@ -97,7 +97,7 @@ def navega_para_painel():
     driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
     print("✅ Container principal carregado.")
 
-def clica_botao(texto, type):
+def clica_botao_tipo(texto, type):
     try:
         print(f"🕓 Aguardando botão '{texto}'...")
         botao = wait.until(

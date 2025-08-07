@@ -1,4 +1,5 @@
 import time
+import sys
 import siop_utils as sb #siop_bot
 from config.config import JQUERY
 
@@ -52,12 +53,17 @@ def executa_tabela():
 
 def insere_nota_do_usuario_em_objetivo_especifico (objetivo, nota):
     lista_objetivo_específico(objetivo)    
-    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos_primeiro_item")
-    sb.preenche_input("Nota do usuário", "objetivo_especifico_informacoes_basicas_nota_do_usuario", nota)      
+    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+    sb.preenche_input("Nota do usuário", "objetivo_especifico.informacoes_basicas.nota_do_usuario", nota)      
+
+def abre_indicador_do_objetivo_especifico (objetivo):
+    lista_objetivo_específico(objetivo)    
+    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+    sb.clicar_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
+    sb.clicar_link("Indicador do objetivo", "objetivo_especifico.botao_indicadores.indicador")
 
 def main():
-    global driver, wait
-    sb.driver, sb.wait = sb.iniciar_driver()
+    sb.iniciar_driver()
     sb.ano = "2024"
     sb.jquery = JQUERY
 
@@ -65,19 +71,27 @@ def main():
     #lista_programas()
     #exporta_programas()
     #lista_objetivo_específico("0002")  
-    insere_nota_do_usuario_em_objetivo_especifico ("0002", "teste")
+    #insere_nota_do_usuario_em_objetivo_especifico ("0002", "teste")
+    abre_indicador_do_objetivo_especifico ("0002")
     #lista_objetivos_específicos()
     #exporta_objetivos_específicos()
     #lista_programa("1144")
+    time.sleep(1)
+    #sb.clica_na_tela_e_digita (598, 52, "teste")
 
-    time.sleep(2)
+    #time.sleep(5)
     sb.driver.quit()
 
 if __name__ == "__main__":
     print ("Iniciando ...")
-    resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
-    if resposta != 's':
-        print("Operação cancelada pelo usuário.")
-    else:    
+    if len(sys.argv) > 1 and sys.argv[1].lower() == '/y':
+        print("🟢 Início automático com argumento '/y'")
         sb.finaliza_navegador()
         main()
+    else:
+        resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
+        if resposta != 's':
+            print("Operação cancelada pelo usuário.")
+        else:    
+            sb.finaliza_navegador()
+            main()

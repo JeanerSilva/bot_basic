@@ -7,6 +7,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 
 import subprocess
 import time
@@ -28,7 +30,7 @@ jquery = True
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def iniciar_driver(tentativas=3, delay=5):
-    global driver, wait
+    global driver, wait, actions
 
     edge_options = Options()
     edge_driver_path = config.DRIVER_DIR
@@ -52,6 +54,7 @@ def iniciar_driver(tentativas=3, delay=5):
             print(f"🚀 Tentativa {tentativa} de iniciar o Edge...")
             driver = webdriver.Edge(service=service, options=edge_options)
             wait = WebDriverWait(driver, 120)
+            actions = ActionChains(driver)
             print("✅ Edge iniciado com sucesso.")
             return driver, wait
         except SessionNotCreatedException as e:
@@ -66,6 +69,15 @@ with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8"
 
 with open(os.path.join(BASE_DIR, "config/urls.json"), "r", encoding="utf-8") as f:
     _urls = json.load(f)
+
+def clica_na_tela(x,y):    
+    actions.move_by_offset(x, y).click().perform()
+
+def digita(texto):
+    actions.send_keys(texto).perform()
+
+def clica_na_tela_e_digita(x,y, texto):    
+    actions.move_by_offset(x, y).click().send_keys(texto).perform()
 
 def get_xpath_elemento(elemento):
     tipo = "xpath"

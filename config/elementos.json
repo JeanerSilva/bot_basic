@@ -24,15 +24,24 @@
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:tblObjetivosEspecificos\"]/thead"
   },
   {
-    "item": "tabela_resultados_objetivos_específicos_primeiro_item",
+    "item": "tabela_resultados_objetivos_específicos.primeiro_item",
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:tblObjetivosEspecificos:0:j_id1174\"]"
   },
   {
-    "item": "objetivo_especifico_informacoes_basicas_nota_do_usuario",
+    "item": "objetivo_especifico.informacoes_basicas.nota_do_usuario",
     "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3151:0:j_id3272:txtNotasUsuarioObjetivo\"]"
+  },
+  {
+    "item": "objetivo_especifico.botao_indicadores",
+    "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3108:botaoIrParaIndicadorBotao\"]"              
+  },
+  {
+    "item": "objetivo_especifico.botao_indicadores.indicador",
+    "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3108:j_id3113:0:j_id3115\"]"
   }
 
 
+  
   
   
 ]

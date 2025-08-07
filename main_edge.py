@@ -15,7 +15,7 @@ def lista_objetivos_específicos():
     sb.clica_botao("Procurar", "submit")  
 
 def seleciona_primeiro_objetivo_listado (descricao, xpath):        
-    sb.clicar_link(descricao, xpath)    
+    sb.clica_link(descricao, xpath)    
 
 def exporta_objetivos_específicos():  
     lista_objetivos_específicos()
@@ -59,8 +59,8 @@ def insere_nota_do_usuario_em_objetivo_especifico (objetivo, nota):
 def abre_indicador_do_objetivo_especifico (objetivo):
     lista_objetivo_específico(objetivo)    
     seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
-    sb.clicar_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
-    sb.clicar_link("Indicador do objetivo", "objetivo_especifico.botao_indicadores.indicador")
+    sb.clica_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
+    sb.clica_link("Indicador do objetivo", "objetivo_especifico.botao_indicadores.indicador")
 
 def main():
     sb.iniciar_driver()

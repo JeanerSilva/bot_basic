@@ -1,3 +1,9 @@
+import subprocess
+import time
+import json
+import os
+import re
+
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
@@ -8,41 +14,29 @@ from selenium.common.exceptions import TimeoutException, StaleElementReferenceEx
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
 
-import subprocess
-import time
-import json
-import os
 import pandas as pd
-from config import config
-import re
 
+from config import config
 
 driver = None
 wait = None
-
 ano = config.ANO_PADRAO
 perfil = config.PERFIL_PADRAO
-
 jquery = True
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = config.BASE_DIR
 
 def iniciar_driver(tentativas=3, delay=5):
     global driver, wait, actions
-
     edge_options = Options()
     edge_driver_path = config.DRIVER_DIR
     print(f"Driver edge: {edge_driver_path}")
-
     service = Service(
         executable_path=config.DRIVER_DIR,
         log_path="logs/edge_driver.log",  # opcional
         service_args=["--verbose"],
         creationflags=subprocess.CREATE_NO_WINDOW  # oculta janela do EdgeDriver
     )
-
     caminho = os.path.expandvars(config.EDGE_DIR)
     caminho_ajustado = re.sub(r'\\+', r'\\\\', caminho)
     argumento = f'--user-data-dir={caminho_ajustado}'
@@ -59,8 +53,7 @@ def iniciar_driver(tentativas=3, delay=5):
             return driver, wait
         except SessionNotCreatedException as e:
             print(f"❌ Erro ao iniciar Edge (tentativa {tentativa}): {e}")
-            time.sleep(delay)
-    
+            time.sleep(delay)    
     raise RuntimeError("❌ Falha ao iniciar o Edge após múltiplas tentativas.")    
 
 # Carrega os elementos do JSON uma vez
@@ -69,15 +62,6 @@ with open(os.path.join(BASE_DIR, "config/elementos.json"), "r", encoding="utf-8"
 
 with open(os.path.join(BASE_DIR, "config/urls.json"), "r", encoding="utf-8") as f:
     _urls = json.load(f)
-
-def clica_na_tela(x,y):    
-    actions.move_by_offset(x, y).click().perform()
-
-def digita(texto):
-    actions.send_keys(texto).perform()
-
-def clica_na_tela_e_digita(x,y, texto):    
-    actions.move_by_offset(x, y).click().send_keys(texto).perform()
 
 def get_xpath_elemento(elemento):
     tipo = "xpath"
@@ -91,6 +75,15 @@ def get_url(atividade):
         if item["atividade"] == atividade:
             return item["url"]
     raise ValueError(f"URL para atividade '{atividade}' não encontrada.")
+
+def clica_na_tela(x,y):    
+    actions.move_by_offset(x, y).click().perform()
+
+def digita(texto):
+    actions.send_keys(texto).perform()
+
+def clica_na_tela_e_digita(x,y, texto):    
+    actions.move_by_offset(x, y).click().send_keys(texto).perform()
 
 def acessa(url):
     driver.get(config.URL_BASE + get_url(url))
@@ -177,7 +170,7 @@ def aguarda_elemento(descricao, xpath, jquery):
         driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
         raise
 
-def clicar_link(descricao, elemento):
+def clica_link(descricao, elemento):
     xpath = get_xpath_elemento(elemento)
     try:
         elemento = aguarda_elemento(descricao, xpath, jquery)  
@@ -225,16 +218,6 @@ def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
 
     raise RuntimeError(f"❌ Falha ao selecionar '{texto_visivel}' no campo '{descricao}' após {tentativas} tentativas.")
 
-def finaliza_navegador():
-    try:
-        subprocess.run([
-            "powershell", "-Command",
-            "Stop-Process -Name 'msedge' -Force -ErrorAction SilentlyContinue"
-        ], check=True)
-        print("🧹 Edge encerrado com sucesso antes da execução.")
-    except subprocess.CalledProcessError:
-        print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
-
 def seleciona_ano_e_perfil_e_muda_de_frame():
     xpath_exercicio = get_xpath_elemento("exercicio")
     aguarda_elemento("Exercício", xpath_exercicio, jquery)
@@ -244,31 +227,12 @@ def seleciona_ano_e_perfil_e_muda_de_frame():
     preenche_seletor("Perfil", xpath_perfil, perfil)
     navega_para_painel()    
 
-def aguardar_login_manual(timeout=1200):
+def finaliza_navegador():
     try:
-        print("🕵️ Verificando se é necessário login manual...")
-
-        # Passo 1: Verifica se o botão de login gov.br aparece
-        botao_login = wait.until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[contains(., "Entrar com") and contains(., "gov.br")]')
-            )
-        )
-
-        if botao_login.is_displayed():
-            print(f"🔒 Login não detectado. Aguardando até {timeout} segundos para que o usuário inicie o login com gov.br...")
-            botao_login.click()
-
-            # Passo 2: Espera o campo para digitar o CPF aparecer
-            wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="enter-account-id"]')))
-            print("⌨️ Campo para CPF detectado. Aguardando usuário digitar e prosseguir...")
-
-            # Passo 3: Aguarda até o botão de envio aparecer (após o preenchimento do CPF)
-            wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="submit-button"]')))
-            print("📨 Botão de envio detectado. Login em andamento...")
-
-        else:
-            print("✅ Usuário já está logado (botão de login não visível).")
-
-    except TimeoutException:
-        print("⚠️ Elementos de login não apareceram dentro do tempo esperado.")
+        subprocess.run([
+            "powershell", "-Command",
+            "Stop-Process -Name 'msedge' -Force -ErrorAction SilentlyContinue"
+        ], check=True)
+        print("🧹 Edge encerrado com sucesso antes da execução.")
+    except subprocess.CalledProcessError:
+        print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")

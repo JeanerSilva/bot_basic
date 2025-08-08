@@ -72,6 +72,18 @@ def get_xpath_elemento(elemento):
             return elem.get(tipo)
     raise ValueError(f"Elemento '{elemento}' com tipo '{tipo}' não encontrado.")
 
+def get_xpath_elemento_parametrizado(nome_item, **kwargs):
+    for elem in _elementos:
+        if elem["item"] == nome_item:
+            xpath_template = elem.get("xpath")
+            if not xpath_template:
+                raise ValueError(f"Elemento '{nome_item}' não tem xpath definido.")
+            for key, value in kwargs.items():
+                xpath_template = xpath_template.replace(f"${{{key}}}", str(value))
+            return xpath_template
+    raise ValueError(f"Elemento '{nome_item}' não encontrado.")
+
+
 def get_url(atividade):
     for item in _urls:
         if item["atividade"] == atividade:
@@ -95,8 +107,8 @@ def abrir_excel(arquivo, aba):
     return pd.read_excel(arquivo, sheet_name=aba)
 
 def navega_para_painel():
-    wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
-    driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
+    iframe = aguarda_elemento("Container principal", "//iframe")
+    driver.switch_to.frame(iframe)
     print("✅ Container principal carregado.")
 
 def clica_botao_tipo(texto, type):
@@ -118,12 +130,12 @@ def clica_botao_tipo(texto, type):
         print(f"❌ Botão '{texto}' não encontrado.")
         driver.save_screenshot(f"erro_botao_{texto.lower()}.png")
 
-def _registrar_erro(descricao, element_id):
-    print(f"❌ Timeout ao localizar o campo '{descricao}' com id='{element_id}'")
+def _registrar_erro(descricao, xpath):
+    print(f"❌ Timeout ao localizar o campo '{descricao}' com xpath='{xpath}'")
     driver.save_screenshot(f"erro_{descricao.lower().replace(' ', '_')}.png")
     with open(f"erro_{descricao.lower().replace(' ', '_')}.html", "w", encoding="utf-8") as f:
         f.write(driver.page_source)
-    raise TimeoutException(f"Campo '{descricao}' com id='{element_id}' não encontrado.")
+    raise TimeoutException(f"Campo '{descricao}' com xpath='{xpath}' não encontrado.")
 
 def aguarda_dom(timeout=10):
     print("🕓 Aguardando document.readyState = 'complete'...")
@@ -167,17 +179,21 @@ def aguarda_elemento(descricao, xpath):
         elemento = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         if jquery:
             aguarda_jquery()  # nova adição
+            print(f"✅ Campo '{descricao}' carregado e ações do jQuery já encerradas.")
         else:
             aguarda_dom()
-        print(f"✅ Campo '{descricao}' carregado e ações do jQuery já encerradas.")
+            print(f"✅ Campo '{descricao}' carregado e ações do DOM já encerradas.")        
         return elemento
     except TimeoutException:
         print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
         driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
         raise
 
-def clica_link(descricao, elemento):
-    xpath = get_xpath_elemento(elemento)
+def clica_link(descricao, elemento, _numero=0):
+    if _numero == 0:
+        xpath = get_xpath_elemento(elemento)
+    else:
+        xpath = get_xpath_elemento_parametrizado(elemento, numero=_numero)
     try:
         elemento = aguarda_elemento(descricao, xpath)  
         elemento.click()
@@ -185,7 +201,7 @@ def clica_link(descricao, elemento):
     except Exception as e:
         print(f"❌ Erro ao clicar no link: {e}")
 
-def clica_link_por_texto_inicial(texto_inicial, timeout=10):
+def clica_link_por_texto_inicial(texto_inicial):
     print(f"🕓 Procurando link que começa com: '{texto_inicial}'...")
     xpath = f"//a[starts-with(normalize-space(text()), '{texto_inicial}')]"
 
@@ -204,16 +220,15 @@ def clica_link_por_texto_inicial(texto_inicial, timeout=10):
 
 def preenche_input(descricao, elemento, texto):
     xpath = get_xpath_elemento(elemento)
-    aguarda_elemento(descricao, xpath)    
+    input_element = aguarda_elemento(descricao, xpath)  # já espera o elemento e o jQuery
     print(f"✅ Campo '{descricao}' localizado.")
     try:
-        print(f"🕓 Aguardando campo '{descricao}'...")
-        input_element = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
         input_element.clear()
         input_element.send_keys(texto)
         print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
-    except TimeoutException:
+    except Exception:
         _registrar_erro(descricao, xpath)
+
 
 def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
     for tentativa in range(1, tentativas + 1):

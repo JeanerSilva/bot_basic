@@ -17,11 +17,11 @@ class objetivo_especifico:
         return self
 
     def seleciona_objetivo_listado(self):
-        sb.clica_link("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+        sb.clica_link("Primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item", self.objetivo)
         return self
 
     def abre_entregas(self):
-        sb.clica_link("Botão Entregas", "objetivo_especifico.botao_entregas")
+        sb.clica_link("Botão Entregas dentro do objetivo específico", "objetivo_especifico.botao_entregas")
         return self
 
     def abre_indicadores(self):

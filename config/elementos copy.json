@@ -33,11 +33,11 @@
   },
   {
     "item": "tabela_resultados_objetivos_específicos.primeiro_item",
-    "xpath": "//tr[contains(@id, 'tblObjetivosEspecificos:0')]//a[normalize-space(text())='${numero}']"
+    "xpath": "//*[starts-with(@id, \"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:tblObjetivosEspecificos:0:\")]"
   },
   { 
     "item": "tabela_resultados_entrega.primeiro_item",
-    "xpath": "//tr[contains(@id, 'tblEntregas:0')]//a[normalize-space(text())='${numero}']"
+    "xpath": "//*[starts-with(@id, \"form:subTelaPesquisa:subTelaPesquisaEntrega:tblEntregas:0:\")]"
   },  
   {
     "item": "objetivo_especifico.informacoes_basicas.nota_do_usuario",
@@ -49,7 +49,7 @@
   },
   {
     "item": "objetivo_especifico.botao_indicadores.indicador",
-    "xpath": "//*[starts-with(@id, \"form:subTelaObjetivoEspecifico:j_\")]"
+    "xpath": "//*[starts-with(@id,\"form:subTelaObjetivoEspecifico:j_id3108:j_id3113:0:j_id3115\"]"
   },
   {
     "item": "objetivo_especifico.botao_entregas",

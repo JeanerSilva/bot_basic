@@ -24,9 +24,18 @@ class objetivo_especifico:
         sb.clica_link("Botão Entregas dentro do objetivo específico", "objetivo_especifico.botao_entregas")
         return self
 
+
     def abre_indicadores(self):
         sb.clica_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
+        sb.clica_item_painel(
+                "Painel de Indicadores",
+                "objetivo_especifico.painel_indicadores",
+                "Link do Indicador",
+                "objetivo_especifico.botao_indicadores.indicador"
+            )
+
         return self
+
 
     def acessa_indicador(self):
         sb.clica_link("Indicador do objetivo", "objetivo_especifico.botao_indicadores.indicador")

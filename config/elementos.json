@@ -48,8 +48,12 @@
    "xpath": "//a[contains(@id, 'botaoIrParaIndicadorBotao') and contains(@title, 'Ir para Indicador')]"
   },
   {
+    "item": "objetivo_especifico.painel_indicadores",
+   "xpath": "//*[contains(@id, 'botaoIrParaIndicadorPainelDropDown')]"
+  },  
+  {
     "item": "objetivo_especifico.botao_indicadores.indicador",
-    "xpath": "//*[starts-with(@id, \"form:subTelaObjetivoEspecifico:j_\")]"
+    "xpath": "//a[contains(@class, 'ItemLink')]"
   },
   {
     "item": "objetivo_especifico.botao_entregas",

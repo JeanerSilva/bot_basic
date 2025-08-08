@@ -220,6 +220,17 @@ def clica_link_por_texto_inicial(texto_inicial):
 
 from selenium.common.exceptions import StaleElementReferenceException
 
+def clica_item_painel(descricao_painel, item_painel, descricao_link, item_link):
+    painel_xpath = get_xpath_elemento(item_painel)
+    aguarda_elemento(descricao_painel, painel_xpath)
+
+    link_xpath = painel_xpath + get_xpath_elemento(item_link)
+    link = aguarda_elemento(descricao_link, link_xpath)
+
+    driver.execute_script("arguments[0].scrollIntoView(true);", link)
+    driver.execute_script("arguments[0].click();", link)
+    print(f"✅ {descricao_link} clicado com sucesso.")
+
 def preenche_input(descricao, elemento, texto):
     xpath = get_xpath_elemento(elemento)
     try:

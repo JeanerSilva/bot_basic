@@ -38,6 +38,10 @@
   {
     "item": "objetivo_especifico.botao_indicadores.indicador",
     "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3108:j_id3113:0:j_id3115\"]"
+  },
+  {
+    "item": "objetivo_especifico.botao_entregas",
+    "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3121:botaoIrParaEntregaBotao\"]"
   }
 
 

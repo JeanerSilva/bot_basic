@@ -179,6 +179,23 @@ def clica_link(descricao, elemento):
     except Exception as e:
         print(f"❌ Erro ao clicar no link: {e}")
 
+def clica_link_por_texto_inicial(texto_inicial, timeout=10):
+    print(f"🕓 Procurando link que começa com: '{texto_inicial}'...")
+    xpath = f"//a[starts-with(normalize-space(text()), '{texto_inicial}')]"
+
+    try:
+        link = aguarda_elemento(f"Link '{texto_inicial}'", xpath, jquery)  # usa sua função
+        try:
+            link.click()
+            print("✅ Link clicado com sucesso.")
+        except Exception as e:
+            mensagem_curta = str(e).split("\n")[0]  # extrai apenas a primeira linha
+            print(f"⚠️ Clique normal falhou: {mensagem_curta}")
+            driver.execute_script("arguments[0].click();", link)
+            print("✅ Link clicado via JavaScript.")
+    except Exception as e:
+        print(f"❌ Erro ao localizar ou clicar no link: {e}")
+
 def preenche_input(descricao, elemento, texto):
     xpath = get_xpath_elemento(elemento)
     aguarda_elemento(descricao, xpath, jquery)    

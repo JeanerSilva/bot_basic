@@ -35,13 +35,20 @@ def main():
     
     # sb.espera(5)
 
+    # flow.objetivo_especifico("0002")\
+    #     .acessa()\
+    #     .lista()\
+    #     .seleciona_objetivo_listado()\
+    #     .abre_indicadores()
+
+
     flow.objetivo_especifico("0002")\
-       .acessa()\
-       .lista()\
-       .seleciona_objetivo_listado()\
-       .abre_indicadores()
-       #.abre_entregas()\       
-       #.clica_link_entrega_por_texto("Encontros anuais com")
+        .acessa()\
+        .lista()\
+        .seleciona_objetivo_listado()\
+        .abre_entregas()\
+        .clica_link_entrega_por_texto("Encontros anuais com")
+    
 
     sb.espera(10)
     sb.encerra()

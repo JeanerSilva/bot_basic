@@ -155,7 +155,11 @@ def aguarda_jquery(timeout=10):
         time.sleep(0.5)
     print("⚠️ jQuery ainda ativo (ou script falhou) após timeout.")
 
-def aguarda_elemento(descricao, xpath, jquery):
+def aguarda_tabela(descricao, tabela):
+    xpath = get_xpath_elemento(tabela)
+    aguarda_elemento(descricao, xpath)
+
+def aguarda_elemento(descricao, xpath):
     print(f"🕓 Aguardando campo '{descricao}'...")
     try:
         elemento = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -173,7 +177,7 @@ def aguarda_elemento(descricao, xpath, jquery):
 def clica_link(descricao, elemento):
     xpath = get_xpath_elemento(elemento)
     try:
-        elemento = aguarda_elemento(descricao, xpath, jquery)  
+        elemento = aguarda_elemento(descricao, xpath)  
         elemento.click()
         print("✅ Link clicado com sucesso.")
     except Exception as e:
@@ -184,7 +188,7 @@ def clica_link_por_texto_inicial(texto_inicial, timeout=10):
     xpath = f"//a[starts-with(normalize-space(text()), '{texto_inicial}')]"
 
     try:
-        link = aguarda_elemento(f"Link '{texto_inicial}'", xpath, jquery)  # usa sua função
+        link = aguarda_elemento(f"Link '{texto_inicial}'", xpath)  # usa sua função
         try:
             link.click()
             print("✅ Link clicado com sucesso.")
@@ -198,7 +202,7 @@ def clica_link_por_texto_inicial(texto_inicial, timeout=10):
 
 def preenche_input(descricao, elemento, texto):
     xpath = get_xpath_elemento(elemento)
-    aguarda_elemento(descricao, xpath, jquery)    
+    aguarda_elemento(descricao, xpath)    
     print(f"✅ Campo '{descricao}' localizado.")
     try:
         print(f"🕓 Aguardando campo '{descricao}'...")
@@ -213,7 +217,7 @@ def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
     for tentativa in range(1, tentativas + 1):
         try:
             print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}'...")
-            aguarda_elemento(descricao, xpath, jquery)
+            aguarda_elemento(descricao, xpath)
             print(f"✅ Campo '{descricao}' localizado.")
             
             select_element = driver.find_element(By.XPATH, xpath)
@@ -237,10 +241,10 @@ def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
 
 def seleciona_ano_e_perfil_e_muda_de_frame():
     xpath_exercicio = get_xpath_elemento("exercicio")
-    aguarda_elemento("Exercício", xpath_exercicio, jquery)
+    aguarda_elemento("Exercício", xpath_exercicio)
     preenche_seletor("Exercício", xpath_exercicio, ano)
     xpath_perfil = get_xpath_elemento("perfil")
-    aguarda_elemento("Perfil", xpath_perfil, jquery)
+    aguarda_elemento("Perfil", xpath_perfil)
     preenche_seletor("Perfil", xpath_perfil, perfil)
     navega_para_painel()    
 

@@ -1,7 +1,8 @@
 import time
 import sys
 import siop_utils as sb #siop_bot
-from config.config import JQUERY
+from objetivo_flow import ObjetivoEspecificoFlow
+from programa_flow import ProgramaFlow
 
 def lista_objetivo_específico(objetivo):  
     if not objetivo:
@@ -21,7 +22,7 @@ def seleciona_primeiro_objetivo_listado (descricao, xpath):
 
 def exporta_objetivos_específicos():  
     lista_objetivos_específicos()
-    sb.aguarda_elemento("Tabela Objetivos", "tabela_resultados_objetivos_específicos", JQUERY) 
+    sb.aguarda_tabela("Tabela Objetivos", "tabela_resultados_objetivos_específicos") 
     sb.clica_botao_tipo("Exportar...", "button") 
 
 def lista_programa(programa):  
@@ -39,7 +40,7 @@ def lista_programas():
 
 def exporta_programas():  
     lista_programas()
-    sb.aguarda_elemento("Tabela Programas", "tabela_resultados_programas", JQUERY)
+    sb.aguarda_tabela("Tabela Programas", "tabela_resultados_programas") 
     sb.clica_botao_tipo("Exportar...", "button") 
 
 def executa_tabela():
@@ -81,20 +82,33 @@ def abre_entregas_do_objetivo_especifico (objetivo, link):
 def main():
     sb.iniciar_driver()
     sb.ano = "2024"
-    sb.jquery = JQUERY
 
     #executa_tabela()   
     #lista_programas()
-    #exporta_programas()
+    exporta_programas()
     #lista_objetivo_específico("0002")  
     #insere_nota_do_usuario_em_objetivo_especifico ("0002", "teste")
     #abre_indicador_do_objetivo_especifico ("0002")
-    abre_entregas_do_objetivo_especifico ("0002", "Encontros anuais com")
+    #abre_entregas_do_objetivo_especifico ("0002", "Encontros anuais com")
     #lista_objetivos_específicos()
     #exporta_objetivos_específicos()
     #lista_programa("1144")
-    time.sleep(10)
+    
     #sb.clica_na_tela_e_digita (598, 52, "teste") 
+
+    #ObjetivoEspecificoFlow("0002")\
+    #    .acessar()\
+    #    .listar()\
+    #    .selecionar_primeiro()\
+    #    .abrir_entregas()\
+    #    .clicar_link_entrega_por_texto("Encontros anuais com")
+
+    # ProgramaFlow("1144")\
+    #     .acessar()\
+    #     .listar()\
+    #     .exportar()
+
+    time.sleep(10)
 
     #time.sleep(5)
     sb.driver.quit()

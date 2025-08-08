@@ -91,7 +91,8 @@ def main():
     #abre_entregas_do_objetivo_especifico ("0002", "Encontros anuais com")
     #lista_objetivos_específicos()
     #exporta_objetivos_específicos()
-    #lista_programa("1144")    
+    #lista_programa("1144")
+    
     #sb.clica_na_tela_e_digita (598, 52, "teste") 
 
     flow.ObjetivoEspecificoFlow("0002")\
@@ -108,7 +109,8 @@ def main():
 
     time.sleep(10)
 
-    sb.finaliza()
+    #time.sleep(5)
+    sb.encerra()
 
 if __name__ == "__main__":
     print ("Iniciando ...")

@@ -248,8 +248,10 @@ def seleciona_ano_e_perfil_e_muda_de_frame():
     preenche_seletor("Perfil", xpath_perfil, perfil)
     navega_para_painel()    
 
-def finaliza():
+def encerra():
     driver.quit()
+
+def finaliza_navegador():
     try:
         subprocess.run([
             "powershell", "-Command",

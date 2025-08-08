@@ -45,7 +45,7 @@
   },
   {
     "item": "objetivo_especifico.botao_indicadores",
-    "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3108:botaoIrParaIndicadorBotao\"]"              
+   "xpath": "//a[contains(@id, 'botaoIrParaIndicadorBotao') and contains(@title, 'Ir para Indicador')]"
   },
   {
     "item": "objetivo_especifico.botao_indicadores.indicador",
@@ -53,7 +53,7 @@
   },
   {
     "item": "objetivo_especifico.botao_entregas",
-    "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3121:botaoIrParaEntregaBotao\"]"
+    "xpath": "//a[contains(@id, 'botaoIrParaEntregaBotao') and contains(@title, 'Ir para Entrega')]"
   },
   {
     "item": "programa.nao_excluído",

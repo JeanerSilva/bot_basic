@@ -218,16 +218,25 @@ def clica_link_por_texto_inicial(texto_inicial):
     except Exception as e:
         print(f"❌ Erro ao localizar ou clicar no link: {e}")
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 def preenche_input(descricao, elemento, texto):
     xpath = get_xpath_elemento(elemento)
-    input_element = aguarda_elemento(descricao, xpath)  # já espera o elemento e o jQuery
-    print(f"✅ Campo '{descricao}' localizado.")
     try:
+        input_element = aguarda_elemento(descricao, xpath)  # já espera e retorna
+        print(f"✅ Campo '{descricao}' localizado.")
         input_element.clear()
         input_element.send_keys(texto)
         print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
+    except StaleElementReferenceException:
+        print(f"⚠️ Elemento '{descricao}' ficou obsoleto. Tentando localizar novamente...")
+        input_element = aguarda_elemento(descricao, xpath)  # busca de novo
+        input_element.clear()
+        input_element.send_keys(texto)
+        print(f"✅ Campo '{descricao}' preenchido após nova tentativa.")
     except Exception:
         _registrar_erro(descricao, xpath)
+
 
 
 def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):

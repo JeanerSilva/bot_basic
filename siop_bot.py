@@ -33,14 +33,14 @@ def main():
         .lista()\
         .seleciona_entrega_listada()
     
-    # sb.espera(5)
+    sb.espera(5)
 
-    # flow.objetivo_especifico("0002")\
-    #    .acessa()\
-    #    .lista()\
-    #    .seleciona_objetivo_listado()\
-    #    .abre_entregas()\
-    #    .clica_link_entrega_por_texto("Encontros anuais com")
+    flow.objetivo_especifico("0002")\
+       .acessa()\
+       .lista()\
+       .seleciona_objetivo_listado()\
+       .abre_entregas()\
+       .clica_link_entrega_por_texto("Encontros anuais com")
 
     sb.espera(10)
     sb.encerra()

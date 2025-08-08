@@ -1,4 +1,3 @@
-# objetivo_flow.py
 import siop_utils as sb
 
 class ObjetivoEspecificoFlow:
@@ -17,7 +16,7 @@ class ObjetivoEspecificoFlow:
         sb.clica_botao_tipo("Procurar", "submit")
         return self
 
-    def seleciona_primeiro(self):
+    def seleciona_objetivo_listado(self):
         sb.clica_link("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
         return self
 

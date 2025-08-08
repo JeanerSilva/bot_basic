@@ -3,7 +3,9 @@ import time
 import json
 import os
 import re
+import sys
 
+from siop_bot import main
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
@@ -148,7 +150,7 @@ def aguarda_jquery(timeout=10):
                 );
             """)
             if pronto:
-                print("✅ jQuery ausente ou inativo.")
+                print("✅ Ações do jQuery encerradas.")
                 return
         except Exception as e:
             print(f"⚠️ Erro ao verificar jQuery (ignorado): {e}")
@@ -167,7 +169,7 @@ def aguarda_elemento(descricao, xpath):
             aguarda_jquery()  # nova adição
         else:
             aguarda_dom()
-        print(f"✅ Campo '{descricao}' carregado e jQuery inativo.")
+        print(f"✅ Campo '{descricao}' carregado e ações do jQuery já encerradas.")
         return elemento
     except TimeoutException:
         print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
@@ -251,7 +253,38 @@ def seleciona_ano_e_perfil_e_muda_de_frame():
 def encerra():
     driver.quit()
 
+def inicia():
+    if len(sys.argv) > 1 and sys.argv[1].lower() == '/y':
+        print ("Iniciando ...")
+        finaliza_navegador()
+        iniciar_driver()
+        main()
+    else:
+        resposta = input("\n⚠️ Você precisa estar previamente logado no SIOP.\n\nO navegador Microsoft Edge será fechado. Deseja continuar? (s/n): ").strip().lower()
+        if resposta != 's':
+            print("Operação cancelada pelo usuário.")
+        else:    
+            finaliza_navegador()
+            iniciar_driver()
+            main()
+
+
+def define_exercicio(novo_ano=None):
+    global ano  # permite modificar a variável global
+
+    if novo_ano:
+        ano = novo_ano
+        print(f"✅ Ano definido como '{ano}' via argumento.")
+
+def espera(tempo):
+    print(f"🕓 Aguardando {tempo} segundos ...")
+    for i in range(tempo):
+        print(f"\r⏳ {i + 1}/{tempo} segundos", end='', flush=True)
+        time.sleep(1)
+    print("\n✅ Concluído.")
+
 def finaliza_navegador():
+    print ("🕓 Verificando se o navegador está aberto ...")
     try:
         subprocess.run([
             "powershell", "-Command",

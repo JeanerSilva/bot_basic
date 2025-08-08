@@ -16,7 +16,7 @@ def lista_objetivos_específicos():
     sb.seleciona_ano_e_perfil_e_muda_de_frame()
     sb.clica_botao_tipo("Procurar", "submit")  
 
-def seleciona_primeiro_objetivo_listado (descricao, xpath):        
+def seleciona_objetivo_listado (descricao, xpath):        
     sb.clica_link(descricao, xpath)    
 
 def exporta_objetivos_específicos():  
@@ -59,14 +59,14 @@ def insere_nota_do_usuario_em_objetivo_especifico (objetivo, nota):
     if not objetivo or not nota:
         raise ValueError("❌ Parâmetro 'objetivo' é obrigatório para abrir entregas.")
     lista_objetivo_específico(objetivo)    
-    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+    seleciona_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
     sb.preenche_input("Nota do usuário", "objetivo_especifico.informacoes_basicas.nota_do_usuario", nota)      
 
 def abre_indicador_do_objetivo_especifico (objetivo):
     if not objetivo:
         raise ValueError("❌ Parâmetro 'objetivo' é obrigatório para abrir entregas.")
     lista_objetivo_específico(objetivo)    
-    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+    seleciona_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
     sb.clica_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
     sb.clica_link("Indicador do objetivo", "objetivo_especifico.botao_indicadores.indicador")
 
@@ -74,7 +74,7 @@ def abre_entregas_do_objetivo_especifico (objetivo, link):
     if objetivo is None or not str(objetivo).strip():
         raise ValueError("❌ Parâmetro 'objetivo' é obrigatório para abrir entregas.")
     lista_objetivo_específico(objetivo)    
-    seleciona_primeiro_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
+    seleciona_objetivo_listado("Seleciona primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item")
     sb.clica_link("Botão Indicadores", "objetivo_especifico.botao_entregas")
     sb.clica_link_por_texto_inicial (link)
 
@@ -98,7 +98,7 @@ def main():
     flow.ObjetivoEspecificoFlow("0002")\
        .acessa()\
        .lista()\
-       .seleciona_primeiro()\
+       .seleciona_objetivo_listado()\
        .abre_entregas()\
        .clica_link_entrega_por_texto("Encontros anuais com")
 
@@ -113,9 +113,8 @@ def main():
     sb.encerra()
 
 if __name__ == "__main__":
-    print ("Iniciando ...")
     if len(sys.argv) > 1 and sys.argv[1].lower() == '/y':
-        print("🟢 Início automático com argumento '/y'")
+        print ("Iniciando ...")
         sb.finaliza_navegador()
         main()
     else:

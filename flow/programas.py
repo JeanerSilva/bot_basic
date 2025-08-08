@@ -22,6 +22,6 @@ class ProgramaFlow:
         return self
 
     def exportar(self):
-        sb.aguarda_elemento("Tabela Programas", "tabela_resultados_programas", sb.jquery)
+        sb.aguarda_tabela("Tabela Programas", "tabela_resultados_programas")
         sb.clica_botao_tipo("Exportar...", "button")
         return self

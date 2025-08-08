@@ -1,8 +1,8 @@
 import time
 import sys
 import siop_utils as sb #siop_bot
-from objetivo_flow import ObjetivoEspecificoFlow
-from programa_flow import ProgramaFlow
+from flow.objetivos import ObjetivoEspecificoFlow
+from flow.programas import ProgramaFlow
 
 def lista_objetivo_específico(objetivo):  
     if not objetivo:
@@ -85,7 +85,7 @@ def main():
 
     #executa_tabela()   
     #lista_programas()
-    exporta_programas()
+    #exporta_programas()
     #lista_objetivo_específico("0002")  
     #insere_nota_do_usuario_em_objetivo_especifico ("0002", "teste")
     #abre_indicador_do_objetivo_especifico ("0002")
@@ -103,10 +103,10 @@ def main():
     #    .abrir_entregas()\
     #    .clicar_link_entrega_por_texto("Encontros anuais com")
 
-    # ProgramaFlow("1144")\
-    #     .acessar()\
-    #     .listar()\
-    #     .exportar()
+    ProgramaFlow("1144")\
+        .acessar()\
+        .listar()\
+        .exportar()
 
     time.sleep(10)
 

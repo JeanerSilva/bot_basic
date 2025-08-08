@@ -47,7 +47,7 @@ A variável de sistema %LOCALAPPDATA% substitui "C:\\Users\\usuarioXXXXXXXX\\App
 
 ## Uso
 
-Edite o main.py para executar as funcionalidades necessárias.
+Edite o siop_bot.py para executar as funcionalidades necessárias.
 
 O sistema usa o Microsoft Edge, que será fechado toda vez que a aplicação for usada.
 
@@ -58,16 +58,29 @@ Todas as ações serão feitas em nome do usuário logado.
 O acesso por meio da senha que foi logada se dá pelo uso do perfil padrão do Edge. 
 
 
-## Trabalho com atividades sequenciais
-
-Há um exemplo que lista um programa, limpa a tela e lista o próximo.
-Os programas estão no arquivo lista.xlsx, aba Plan1 e cabeçalho "Programa"
-
-
 ## Acréscimos de novas funcionalidades
 
-Procurar o xpath de cada item e adicionar no arquivo elementos.json.
-Para acesso a outras urls, adicionar a url no arquivo urls.json
+Verificar se há existe a url em config/urls.json
+
+Avaliar o tipo de interação necessário:
+- preenhcer input ou textarea
+- preencher seletor
+- clicar botão
+
+No caso de input ou textarea:
+- Procurar o xpath de cada item e adicionar no arquivo elementos.json.
+- Verificar qual arquivo deve ser alterado na pasta flow:
+-- programas.py: trabalha com a tela de todos os programas selecionados
+-- programa.py: trabaha com um programa específico.
+-- objetivos_específicos.py: trabalha com a tela de todos os objetivos específicos selecionados
+-- objetivo_específico.py: trabalha com um objetivo específico específico
+-- entregas.py: trabalha com a tela de todos as entregas selecionados
+-- entrega.py: trabalha com uma entrega específica
+- adicionar um fluxo personalizado
+-- avalie se a função desejada já consta no arquivo siop_utils.py
+-- se já existir, apenas adiconar no arquivo de fluxo com sb.função
+
+
 
 No caso dos botões, deve-se saber o tipo e o valor.
 

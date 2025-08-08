@@ -42,10 +42,18 @@
   {
     "item": "objetivo_especifico.botao_entregas",
     "xpath": "//*[@id=\"form:subTelaObjetivoEspecifico:j_id3121:botaoIrParaEntregaBotao\"]"
+  },
+  {
+    "item": "programa.nao_excluído",
+    "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaPrograma:cmbPesquisaProgramaExcluido\"]"
+    
+  },
+  {
+    "item": "objetivo.nao_excluído",
+    "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:cmbPesquisaObjetivoExcluido\"]"
   }
 
 
-  
   
   
 ]

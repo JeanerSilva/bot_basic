@@ -218,7 +218,7 @@ def preenche_input(descricao, elemento, texto):
 def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
     for tentativa in range(1, tentativas + 1):
         try:
-            print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}'...")
+            print(f"🕓 Tentativa {tentativa} - aguardando campo '{descricao}' para preencer com {texto_visivel}...")
             aguarda_elemento(descricao, xpath)
             print(f"✅ Campo '{descricao}' localizado.")
             
@@ -249,6 +249,11 @@ def seleciona_ano_e_perfil_e_muda_de_frame():
     aguarda_elemento("Perfil", xpath_perfil)
     preenche_seletor("Perfil", xpath_perfil, perfil)
     navega_para_painel()    
+
+def seleciona_seletor(descricao, elemento, texto_visivel):
+    xpath = get_xpath_elemento(elemento)
+    aguarda_elemento(descricao, xpath)
+    preenche_seletor(descricao, xpath, texto_visivel)
 
 def encerra():
     driver.quit()

@@ -1,6 +1,6 @@
 import siop_utils as sb
 
-class ObjetivoEspecificoFlow:
+class objetivo_especifico:
     def __init__(self, objetivo: str):
         if not objetivo or not str(objetivo).strip():
             raise ValueError("❌ Parâmetro 'objetivo' é obrigatório e não pode estar vazio.")

@@ -1,8 +1,7 @@
 import time
 import sys
 import siop_utils as sb #siop_bot
-from flow.objetivos import ObjetivoEspecificoFlow
-from flow.programas import ProgramaFlow
+import flow
 
 def lista_objetivo_específico(objetivo):  
     if not objetivo:
@@ -92,26 +91,24 @@ def main():
     #abre_entregas_do_objetivo_especifico ("0002", "Encontros anuais com")
     #lista_objetivos_específicos()
     #exporta_objetivos_específicos()
-    #lista_programa("1144")
-    
+    #lista_programa("1144")    
     #sb.clica_na_tela_e_digita (598, 52, "teste") 
 
-    #ObjetivoEspecificoFlow("0002")\
-    #    .acessar()\
-    #    .listar()\
-    #    .selecionar_primeiro()\
-    #    .abrir_entregas()\
-    #    .clicar_link_entrega_por_texto("Encontros anuais com")
+    flow.ObjetivoEspecificoFlow("0002")\
+       .acessa()\
+       .lista()\
+       .seleciona_primeiro()\
+       .abre_entregas()\
+       .clica_link_entrega_por_texto("Encontros anuais com")
 
-    ProgramaFlow("1144")\
-        .acessar()\
-        .listar()\
-        .exportar()
+    # flow.ProgramaFlow("1144")\
+    #     .acessa()\
+    #     .lista()\
+    #     .exporta()
 
     time.sleep(10)
 
-    #time.sleep(5)
-    sb.driver.quit()
+    sb.finaliza()
 
 if __name__ == "__main__":
     print ("Iniciando ...")

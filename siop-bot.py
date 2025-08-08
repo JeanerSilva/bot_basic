@@ -94,7 +94,7 @@ def main():
     #exporta_objetivos_específicos()
     #lista_programa("1144")
     time.sleep(10)
-    #sb.clica_na_tela_e_digita (598, 52, "teste")
+    #sb.clica_na_tela_e_digita (598, 52, "teste") 
 
     #time.sleep(5)
     sb.driver.quit()

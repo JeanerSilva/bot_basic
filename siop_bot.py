@@ -54,4 +54,4 @@ def main():
     sb.encerra()
 
 if __name__ == "__main__":
-    sb.inicia()
+    sb.inicia() 

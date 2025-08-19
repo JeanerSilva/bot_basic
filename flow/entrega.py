@@ -8,7 +8,7 @@ class entrega:
 
     def acessa(self):
         sb.acessa("ppa->entrega")
-        sb.seleciona_ano_e_perfil_e_muda_de_frame()
+        sb.seleciona_ano_e_perfil_e_muda_de_frame("ppa.entrega.entrega_input")
         return self
 
     def lista(self):

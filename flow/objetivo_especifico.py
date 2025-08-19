@@ -1,4 +1,7 @@
 import siop_utils as sb
+from datetime import datetime
+import os
+
 
 class objetivo_especifico:
     def __init__(self, objetivo: str):
@@ -8,7 +11,7 @@ class objetivo_especifico:
 
     def acessa(self):
         sb.acessa("ppa->objetivo_específico")
-        sb.seleciona_ano_e_perfil_e_muda_de_frame()
+        sb.seleciona_ano_e_perfil_e_muda_de_frame("ppa.objetivo_especifico.objetivo_especifico_input")
         return self
 
     def lista(self):
@@ -49,12 +52,19 @@ class objetivo_especifico:
         return self
     
     def apaga_arquivo_pac(self):
-        sb.clica_link("Apaga arquivo", "objetivo-especifico.novopac.botao_excluir")
-        sb.espera(1)
-        sb.clica_botao_tipo("Confirmar", "submit")
+        print("Apaga arquivo")
+        retorno = sb.clica_link_opcional("Apaga arquivo", "objetivo-especifico.novopac.botao_excluir")
+        print("Retorno {retorno}")
+        if retorno: 
+            sb.espera(1)
+            sb.clica_botao_tipo("Confirmar", "submit")
+            sb.espera(1)
+            sb.clica_link_por_texto_inicial("Salvar")
+            sb.espera(1)
+        return self
         
 
-    def adiciona_arquivo_pac(self, descricao, arquivo):
+    def adiciona_arquivo_pac(self, descricao, arquivo, objetivo, exercicio):
         sb.clica_botao_tipo("Adicionar...", "submit")
         sb.preenche_input("Descrição PAC", "objetivo-especifico.novopac.upload_file.input_descricao", descricao)
     
@@ -75,6 +85,15 @@ class objetivo_especifico:
        
         sb.clica_botao_tipo("Confirmar", "submit")                                                              
         sb.clica_link_por_texto_inicial("Salvar")
-        sb.driver.switch_to.default_content()
-        sb.acessa("inicio")
+
+        nome_print = os.path.join(
+            "prints",
+            f"{exercicio}_OE_{objetivo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        )
+        sb.driver.save_screenshot(nome_print)
+        print(f"✅ OE {objetivo} atualizado com sucesso.")
+             
+        sb.driver.execute_script("location.reload(true);")
+        return self
+
         

@@ -4,7 +4,7 @@ class objetivos_especificos:
 
     def acessa(self):
         sb.acessa("ppa->objetivo_específico")
-        sb.seleciona_ano_e_perfil_e_muda_de_frame()
+        sb.seleciona_ano_e_perfil_e_muda_de_frame("ppa.objetivo_especifico.objetivo_especifico_input")
         return self
 
     def seleciona_nao_excluido(self):

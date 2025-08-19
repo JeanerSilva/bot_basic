@@ -1,6 +1,7 @@
 import siop_utils as sb #siop_bot
 import flow
 from pathlib import Path
+import os
 
 def main():
     
@@ -48,9 +49,50 @@ def main():
     #     .abre_entregas()\
     #     .clica_link_entrega_por_texto("Encontros anuais com")
     
-    sb.define_exercicio("2024")    
-    path = r"C:\SEPLAN\siop-bot\xls\altera"
-    #path = r"C:\SEPLAN\siop-bot\xls\altera\Dezembro - 2024"
+    os.makedirs("prints", exist_ok=True)
+
+    # exercicio = "2024"
+    # sb.define_exercicio(exercicio)    
+    # #path = r"C:\SEPLAN\siop-bot\xls\altera"
+    # path = r"C:\SEPLAN\siop-bot\xls\altera\Dezembro - 2024"
+    # arquivos = sorted(Path(path).glob("*.xlsx"))
+    # if not arquivos:
+    #     print("⚠️ Nenhum arquivo encontrado.")
+    #     return
+
+    # for arq in arquivos:
+    #     if arq.name.startswith("enviado."):
+    #         continue
+    #     num = sb.extrai_numero_pac(arq.name)
+    #     if num is None:
+    #         continue
+    #     objetivo = sb.monta_objetivo(num)  # ajuste aqui se sua regra for diferente
+    #     arquivo = path + "\\" + arq.name
+    #     flow.objetivo_especifico(objetivo)\
+    #      .acessa()\
+    #      .lista()\
+    #      .seleciona_objetivo_listado()\
+    #      .adiciona_arquivo_pac(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 31/12/2024).", arquivo, objetivo, exercicio)
+        
+                        
+    #     novo_nome = arq.with_name(f"enviado.{arq.name}")
+    #     try:
+    #         arq.rename(novo_nome)
+    #         print(f"✅ Arquivo renomeado: {novo_nome}")
+    #     except Exception as e:
+    #         print(f"⚠️ Não consegui renomear {arq.name}: {e}")
+            
+                
+        
+    #     sb.encerra()
+    #     sb.finaliza_navegador()
+    #     sb.iniciar_driver()
+        
+
+    exercicio = "2025"
+    sb.define_exercicio(exercicio)     
+    #path = r"C:\SEPLAN\siop-bot\xls\altera"
+    path = r"C:\SEPLAN\siop-bot\xls\altera\Abril - 2025"
     arquivos = sorted(Path(path).glob("*.xlsx"))
     if not arquivos:
         print("⚠️ Nenhum arquivo encontrado.")
@@ -59,18 +101,17 @@ def main():
     for arq in arquivos:
         if arq.name.startswith("enviado."):
             continue
-
         num = sb.extrai_numero_pac(arq.name)
         if num is None:
             continue
-
         objetivo = sb.monta_objetivo(num)  # ajuste aqui se sua regra for diferente
         arquivo = path + "\\" + arq.name
         flow.objetivo_especifico(objetivo)\
          .acessa()\
          .lista()\
          .seleciona_objetivo_listado()\
-         .adiciona_arquivo_pac(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 31/12/2024).", arquivo)\
+         .apaga_arquivo_pac()\
+         .adiciona_arquivo_pac(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 30/04/2025).",  arquivo, objetivo, exercicio)
 
         print(f"✅ OE {objetivo} atualizado com sucesso.")
 
@@ -80,37 +121,9 @@ def main():
             print(f"✅ Arquivo renomeado: {novo_nome}")
         except Exception as e:
             print(f"⚠️ Não consegui renomear {arq.name}: {e}")
-
-    # sb.define_exercicio("2025")    
-    # path = r"C:\SEPLAN\siop-bot\xls\altera\Abril - 2025"
-    # arquivos = sorted(Path(path).glob("*.xlsx"))
-    # if not arquivos:
-    #     print("⚠️ Nenhum arquivo encontrado.")
-    #     return
-
-    # for arq in arquivos:
-    #    if arq.name.startswith("enviado."):
-    #            continue
-    #     num = sb.extrai_numero_pac(arq.name)
-    #     if num is None:
-    #         continue
-
-    #     objetivo = sb.monta_objetivo(num)  # ajuste aqui se sua regra for diferente
-    #     arquivo = path + "\\" + arq.name
-    #     flow.objetivo_especifico(objetivo)\
-    #      .acessa()\
-    #      .lista()\
-    #      .seleciona_objetivo_listado()\
-    #      .apaga_arquivo_pac()\
-    #      .adiciona_arquivo_pac(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 30/04/2024).", arquivo)
-       
-    #     print(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 30/04/2025).")
-    #    novo_nome = arq.with_name(f"enviado.{arq.name}")
-    #        try:
-    #            arq.rename(novo_nome)
-    #            print(f"✅ Arquivo renomeado: {novo_nome}")
-    #        except Exception as e:
-    #            print(f"⚠️ Não consegui renomear {arq.name}: {e}")
+        sb.encerra()
+        sb.finaliza_navegador()
+        sb.iniciar_driver()
 
     
 

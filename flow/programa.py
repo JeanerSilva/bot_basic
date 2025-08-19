@@ -8,7 +8,7 @@ class programa:
 
     def acessa(self):
         sb.acessa("ppa->programa")
-        sb.seleciona_ano_e_perfil_e_muda_de_frame()
+        sb.seleciona_ano_e_perfil_e_muda_de_frame("ppa.programa.programa_input")
         return self
 
     def lista(self):

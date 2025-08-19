@@ -175,6 +175,23 @@ def aguarda_tabela(descricao, tabela):
     xpath = get_xpath_elemento(tabela)
     aguarda_elemento(descricao, xpath)
 
+def aguarda_elemento_opcional(descricao, xpath, timeout = 3):
+    
+    local_wait = WebDriverWait(driver, timeout)
+    print(f"🕓 Aguardando campo '{descricao}'...")
+    try:
+        elemento = local_wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        if jquery:
+            aguarda_jquery()  # nova adição
+            print(f"✅ Campo '{descricao}' carregado e ações do jQuery já encerradas.")
+        else:
+            aguarda_dom()
+            print(f"✅ Campo '{descricao}' carregado e ações do DOM já encerradas.")        
+        return elemento
+    except TimeoutException:
+        print(f"⚠️ Campo opcional '{descricao}' não encontrado (xpath: {xpath}). Continuando fluxo.")
+        return None
+
 def aguarda_elemento(descricao, xpath):
     print(f"🕓 Aguardando campo '{descricao}'...")
     try:
@@ -219,6 +236,16 @@ def clica_link(descricao, elemento, _numero=0):
         print("✅ Link clicado com sucesso.")
     except Exception as e:
         print(f"❌ Erro ao clicar no link: {e}")
+
+def clica_link_opcional(descricao, elemento,  _numero=0):
+        xpath = get_xpath_elemento(elemento)        
+        elemento = aguarda_elemento_opcional(descricao, xpath)  
+        if elemento:
+            elemento.click()
+            print("✅ Link clicado com sucesso.")
+        else:
+            print("Elemento não encontrado.")
+        return elemento
 
 def clica_link_por_texto_inicial(texto_inicial):
     print(f"🕓 Procurando link que começa com: '{texto_inicial}'...")
@@ -309,14 +336,16 @@ def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
 
     raise RuntimeError(f"❌ Falha ao selecionar '{texto_visivel}' no campo '{descricao}' após {tentativas} tentativas.")
 
-def seleciona_ano_e_perfil_e_muda_de_frame():
+def seleciona_ano_e_perfil_e_muda_de_frame(elemento):
     xpath_exercicio = get_xpath_elemento("exercicio")
     aguarda_elemento("Exercício", xpath_exercicio)
     preenche_seletor("Exercício", xpath_exercicio, ano)
     xpath_perfil = get_xpath_elemento("perfil")
     aguarda_elemento("Perfil", xpath_perfil)
     preenche_seletor("Perfil", xpath_perfil, perfil)
-    navega_para_painel()    
+    #navega_para_painel() 
+    entra_frame_com_elemento("Campo 'Objetivo Específico'", elemento )
+   
 
 def seleciona_seletor(descricao, elemento, texto_visivel):
     xpath = get_xpath_elemento(elemento)
@@ -422,4 +451,39 @@ def contexto_atual(sb):
         }
         print(f"🧭 Contexto: iframe id={info['frame_id']} name={info['frame_name']}")
         return info
-    
+
+
+def entra_frame_com_elemento(descricao_alvo, item_json_xpath, timeout=30):
+    """
+    Troca para o iframe que contém o elemento identificado por 'item_json_xpath'
+    (chave do elementos.json). Sai para default_content antes de procurar.
+    """
+    alvo_xpath = get_xpath_elemento(item_json_xpath)
+    driver.switch_to.default_content()
+    aguarda_dom()
+
+    # Espera haver ao menos 1 iframe na página
+    WebDriverWait(driver, timeout).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "iframe"))
+    )
+    iframes = driver.find_elements(By.TAG_NAME, "iframe")
+    print(f"🔎 Procurando iframe que contém '{descricao_alvo}'. Total iframes: {len(iframes)}")
+
+    for idx, fr in enumerate(iframes):
+        try:
+            driver.switch_to.frame(fr)
+            # dá até 5s por iframe para achar o alvo
+            WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, alvo_xpath))
+            )
+            if jquery:
+                aguarda_jquery()
+            print(f"✅ Entrou no iframe #{idx} que contém '{descricao_alvo}'.")
+            return  # mantém o contexto neste iframe
+        except TimeoutException:
+            driver.switch_to.default_content()
+            continue
+
+    # Se chegar aqui, não achou
+    driver.switch_to.default_content()
+    raise TimeoutException(f"❌ Não encontrei iframe contendo '{descricao_alvo}'.")

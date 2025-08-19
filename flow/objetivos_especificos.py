@@ -15,7 +15,13 @@ class objetivos_especificos:
         sb.clica_botao_tipo("Procurar", "submit")
         return self
 
+    def seleciona_objetivo_listado(self):
+        sb.clica_link("Primeiro objetivo", "tabela_resultados_objetivos_específicos.primeiro_item", self.objetivo)
+        return self
+
     def exporta(self):
         sb.aguarda_tabela("Tabela Objetivos Específicos", "tabela_resultados_objetivos_específicos")
         sb.clica_botao_tipo("Exportar...", "button")
         return self
+    
+   

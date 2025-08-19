@@ -24,7 +24,6 @@ class objetivo_especifico:
         sb.clica_link("Botão Entregas dentro do objetivo específico", "objetivo_especifico.botao_entregas")
         return self
 
-
     def abre_indicadores(self):
         sb.clica_link("Botão Indicadores", "objetivo_especifico.botao_indicadores")
         sb.clica_item_painel(
@@ -48,3 +47,32 @@ class objetivo_especifico:
     def clica_link_entrega_por_texto(self, texto):
         sb.clica_link_por_texto_inicial(texto)
         return self
+    
+    def apaga_arquivo_pac(self):
+        sb.clica_link("Apaga arquivo", "objetivo-especifico.novopac.botao_excluir")
+        sb.espera(1)
+        sb.clica_botao_tipo("Confirmar", "submit")
+        
+
+    def adiciona_arquivo_pac(self, descricao, arquivo):
+        sb.clica_botao_tipo("Adicionar...", "submit")
+        sb.preenche_input("Descrição PAC", "objetivo-especifico.novopac.upload_file.input_descricao", descricao)
+    
+        iframe_locator = "//iframe[@title='Input File Frame' and contains(@class,'uploadFile')]"
+        iframe = sb.aguarda_elemento("Iframe", iframe_locator)
+        sb.driver.switch_to.frame(iframe)
+
+        input_file = sb.aguarda_elemento("Input file", "//input[@type='file']")
+        input_file.send_keys(arquivo)
+        sb.clica_botao_tipo("Enviar", "submit")    
+
+        sb.driver.switch_to.parent_frame()    
+        
+        pronto = "//div[contains(@class,'barraProgressoTxt')]"
+        sb.aguarda_texto_no_elemento("Enviado", pronto, "xlsx")
+        
+        #sb.debug_contexto(sb)
+      
+       
+        sb.clica_botao_tipo("Confirmar", "submit")                                                              
+        

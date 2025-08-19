@@ -1,5 +1,7 @@
 from pathlib import Path
-URL_BASE = "https://www.siop.planejamento.gov.br"
+#URL_BASE = "https://www.siop.planejamento.gov.br"
+URL_BASE = "http://10.209.64.129"
+
 PERFIL_PADRAO = "Controle de Qualidade - SEPLAN"
 ANO_PADRAO = "2025"
 PERFIL_EDGE_PADRAO = "Default"

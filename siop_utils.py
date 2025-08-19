@@ -5,6 +5,7 @@ import os
 import re
 import sys
 
+
 from siop_bot import main
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
@@ -32,6 +33,7 @@ def iniciar_driver(tentativas=3, delay=5):
     global driver, wait, actions
     edge_options = Options()
     edge_driver_path = config.DRIVER_DIR
+    print("Atenção, você precisa já estar logado no SIOP")
     print(f"Driver edge: {edge_driver_path}")
     service = Service(
         executable_path=config.DRIVER_DIR,
@@ -189,6 +191,23 @@ def aguarda_elemento(descricao, xpath):
         driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
         raise
 
+def aguarda_texto_no_elemento(descricao, xpath, texto):
+    print(f"🕓 Aguardando campo '{descricao}'...")
+    try:
+        elemento = wait.until(EC.text_to_be_present_in_element((By.XPATH, xpath), texto))
+        if jquery:
+            aguarda_jquery()  # nova adição
+            print(f"✅ Campo '{descricao}' carregado e ações do jQuery já encerradas.")
+        else:
+            aguarda_dom()
+            print(f"✅ Campo '{descricao}' carregado e ações do DOM já encerradas.")        
+        return elemento
+    except TimeoutException:
+        print(f"❌ Timeout ao localizar o campo '{descricao}' (xpath: {xpath})")
+        driver.save_screenshot(f"erro_xpath_{descricao.lower().replace(' ', '_')}.png")
+        raise
+
+
 def clica_link(descricao, elemento, _numero=0):
     if _numero == 0:
         xpath = get_xpath_elemento(elemento)
@@ -248,6 +267,20 @@ def preenche_input(descricao, elemento, texto):
     except Exception:
         _registrar_erro(descricao, xpath)
 
+def preenche_input_file(descricao, elemento, texto):
+    xpath = get_xpath_elemento(elemento)
+    try:
+        input_element = aguarda_elemento(descricao, xpath)  # já espera e retorna
+        print(f"✅ Campo '{descricao}' localizado.")
+        input_element.send_keys(texto)
+        print(f"✅ Campo '{descricao}' preenchido com '{texto}'.")
+    except StaleElementReferenceException:
+        print(f"⚠️ Elemento '{descricao}' ficou obsoleto. Tentando localizar novamente...")
+        input_element = aguarda_elemento(descricao, xpath)  # busca de novo
+        input_element.send_keys(texto)
+        print(f"✅ Campo '{descricao}' preenchido após nova tentativa.")
+    except Exception:
+        _registrar_erro(descricao, xpath)
 
 
 def preenche_seletor(descricao, xpath, texto_visivel, tentativas=3, delay=2):
@@ -333,3 +366,59 @@ def finaliza_navegador():
         print("🧹 Edge encerrado com sucesso antes da execução.")
     except subprocess.CalledProcessError:
         print("⚠️ Não foi possível encerrar processos do Edge ou nenhum processo estava ativo.")
+
+def extrai_numero_pac(nome_arquivo: str) -> int | None:
+    m = re.search(r'PAC[^0-9]*([0-9]+)', nome_arquivo, flags=re.IGNORECASE)
+    return int(m.group(1)) if m else None
+
+def monta_objetivo(n: int) -> str:
+    return f"{n:04d}"
+
+def debug_contexto(sb, limite=15, mostrar_html_inicio=False):
+    script = r"""
+    const max = arguments[0] || 15;
+    const all = document.querySelectorAll('*');
+    const res = [];
+    const inIframe = (window.self !== window.top);
+    res.push({
+        tipo: '__header__',
+        contexto: inIframe ? 'iframe' : 'default_content',
+        frameId: inIframe && window.frameElement ? window.frameElement.id || null : null,
+        frameName: inIframe && window.frameElement ? window.frameElement.name || null : null,
+        titulo: document.title || '',
+        url: location.href,
+        total: all.length
+    });
+    const n = Math.min(max, all.length);
+    for (let i = 0; i < n; i++) {
+        const e = all[i];
+        res.push({
+            tag: e.tagName.toLowerCase(),
+            id: e.id || '',
+            class: (e.className && e.className.toString) ? e.className.toString() : '',
+            text: (e.textContent || '').trim().slice(0, 120)
+        });
+    }
+    return res;
+    """
+    data = sb.driver.execute_script(script, int(limite))
+    header = data[0]
+    print(f"🔎 DOM atual: total={header['total']} elementos | contexto={header['contexto']} | "
+          f"frameId={header['frameId']} | frameName={header['frameName']}")
+    # Lista amostra
+    for i, row in enumerate(data[1:], start=1):
+        print(f"{i:02d}. <{row['tag']} id='{row['id']}' class='{row['class']}'>  txt='{row['text']}'")
+
+def contexto_atual(sb):
+    frame = sb.driver.execute_script("return self.frameElement")
+    if frame is None:
+        print("🧭 Contexto: default_content (página principal).")
+        return {"contexto": "default_content", "frame_id": None, "frame_name": None}
+    else:
+        info = {
+            "contexto": "iframe",
+            "frame_id": frame.get_attribute("id"),
+            "frame_name": frame.get_attribute("name"),
+        }
+        print(f"🧭 Contexto: iframe id={info['frame_id']} name={info['frame_name']}")
+        return info

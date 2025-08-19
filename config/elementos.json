@@ -71,9 +71,29 @@
   {
     "item": "entrega.nao_excluído",
     "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaEntrega:cmbPesquisaEntregaExcluido\"]"                
+  },
+  {
+    "item": "objetivo-especifico.novopac.botao_visualizar",
+    "xpath": "//a[@class='iceCmdLnk']//img[contains(@src,'ico-visualizar.png')]"
+  },
+  {
+    "item": "objetivo-especifico.novopac.botao_excluir",
+    "xpath": "//a[@class='iceCmdLnk']//img[contains(@src,'icone_excluir.png')]"
+  },
+  {
+    "item": "objetivo-especifico.novopac.upload_file",
+    "xpath": "//iframe[@title='Input File Frame' and contains(@class,'uploadFile')]"            
+  },
+  {
+    "item": "objetivo-especifico.novopac.upload_file.input_descricao",
+    "xpath": "//input[@class='iceInpTxt' and contains(@style,'100% - 15px')]"
   }
 
+  
 
+
+
+  
   
   
 ]

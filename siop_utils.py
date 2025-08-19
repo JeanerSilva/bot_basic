@@ -422,3 +422,4 @@ def contexto_atual(sb):
         }
         print(f"🧭 Contexto: iframe id={info['frame_id']} name={info['frame_name']}")
         return info
+    

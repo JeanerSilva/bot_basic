@@ -71,8 +71,10 @@ class objetivo_especifico:
         pronto = "//div[contains(@class,'barraProgressoTxt')]"
         sb.aguarda_texto_no_elemento("Enviado", pronto, "xlsx")
         
-        #sb.debug_contexto(sb)
-      
+        #sb.debug_contexto(sb)     
        
         sb.clica_botao_tipo("Confirmar", "submit")                                                              
+        sb.clica_link_por_texto_inicial("Salvar")
+        sb.driver.switch_to.default_content()
+        sb.acessa("inicio")
         

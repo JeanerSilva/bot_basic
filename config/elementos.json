@@ -1,15 +1,15 @@
 [
   {
     "item": "ppa.objetivo_especifico.objetivo_especifico_input",
-    "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaObjetivoEspecifico:txtPesquisaObjetivoCodigo']"
+    "xpath": "//input[@type='text' and contains(@class,'txtCodigoObjetivo')]"
   },
   {
-    "item": "ppa.programa.programa_input",
-    "xpath": "//*[@id='form:subTelaPesquisa:subTelaPesquisaPrograma:txtPesquisaProgramaCodigo']"
+    "item": "ppa.programa.programa_input",    
+    "xpath": "//input[@type='text' and contains(@class,'txtPesquisaProgramaCodigo')]"
   },
   {
     "item": "ppa.entrega.entrega_input",
-    "xpath": "//*[@id=\"form:subTelaPesquisa:subTelaPesquisaEntrega:txtCodigoEntrega\"]"
+    "xpath": "//input[@type='text' and contains(@class,'txtCodigoEntrega')]"
   },  
   {
     "item": "exercicio",

@@ -4,6 +4,7 @@ from .objetivo_especifico import objetivo_especifico
 from .objetivos_especificos import objetivos_especificos
 from .entrega import entrega
 from .entregas import entregas
+from .pac import atualizar_pac_em_lote, pac_lote
 
 
 __all__ = [
@@ -12,5 +13,7 @@ __all__ = [
     "objetivo_especifico",
     "objetivos_especificos",
     "entrega",
-    "entregas"
+    "entregas",
+    "atualizar_pac_em_lote",
+    "pac_lote",
 ]

@@ -3,7 +3,30 @@ import flow
 
 def main():
     
-    # flow.programa("1144")\
+    # Atualização de PAC 2024 (sem apagar arquivo antes)
+    flow.atualizar_pac_em_lote(
+        exercicio="2024",
+        pasta=r"C:\SEPLAN\Planilhas xls para alteração SIOP\teste\Dezembro - 2024 - Original\amostra",
+        data_referencia="31/12/2024",
+        reiniciar_driver_entre_arquivos=True,
+        apaga_antes=False,
+    )
+        
+
+    # Atualização de PAC em lote (fluxo padronizado)
+    # flow.atualizar_pac_em_lote(
+    #     exercicio="2025",
+    #     pasta=r"C:\SEPLAN\siop-bot\xls\altera\Abril - 2025",
+    #     data_referencia="30/04/2025",
+    #     reiniciar_driver_entre_arquivos=True,
+    # )
+
+    
+
+    sb.espera(1)
+    sb.encerra()
+
+        # flow.programa("1144")\
     #     .acessa()\
     #     .lista()\
     #     #.exporta()
@@ -48,30 +71,6 @@ def main():
     #     .clica_link_entrega_por_texto("Encontros anuais com")
     
     # os.makedirs("prints", exist_ok=True)
-
-
-    # Atualização de PAC 2024 (sem apagar arquivo antes)
-    flow.atualizar_pac_em_lote(
-        exercicio="2024",
-        pasta=r"C:\SEPLAN\siop-bot\xls\altera\Dezembro - 2024",
-        data_referencia="31/12/2024",
-        reiniciar_driver_entre_arquivos=True,
-        apaga_antes=False,
-    )
-        
-
-    # Atualização de PAC em lote (fluxo padronizado)
-    flow.atualizar_pac_em_lote(
-        exercicio="2025",
-        pasta=r"C:\SEPLAN\siop-bot\xls\altera\Abril - 2025",
-        data_referencia="30/04/2025",
-        reiniciar_driver_entre_arquivos=True,
-    )
-
-    
-
-    sb.espera(10)
-    sb.encerra()
 
 if __name__ == "__main__":
     sb.inicia() 

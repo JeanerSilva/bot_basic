@@ -50,38 +50,14 @@ def main():
     # os.makedirs("prints", exist_ok=True)
 
 
-    # exercicio = "2024"
-    # sb.define_exercicio(exercicio)    
-    # #path = r"C:\SEPLAN\siop-bot\xls\altera"
-    # path = r"C:\SEPLAN\siop-bot\xls\altera\Dezembro - 2024"
-    # arquivos = sorted(Path(path).glob("*.xlsx"))
-    # if not arquivos:
-    #     print("⚠️ Nenhum arquivo encontrado.")
-    #     return
-    # for arq in arquivos:
-    #     if arq.name.startswith("enviado."):
-    #         continue
-    #     num = sb.extrai_numero_pac(arq.name)
-    #     if num is None:
-    #         continue
-    #     objetivo = sb.monta_objetivo(num)  # ajuste aqui se sua regra for diferente
-    #     arquivo = path + "\\" + arq.name
-    #     flow.objetivo_especifico(objetivo)\
-    #      .acessa()\
-    #      .lista()\
-    #      .seleciona_objetivo_listado()\
-    #      .adiciona_arquivo_pac(f"OE {objetivo}: Ações do Novo PAC (Data de referência: 31/12/2024).", arquivo, objetivo, exercicio)
-        
-                        
-    #     novo_nome = arq.with_name(f"enviado.{arq.name}")
-    #     try:
-    #         arq.rename(novo_nome)
-    #         print(f"✅ Arquivo renomeado: {novo_nome}")
-    #     except Exception as e:
-    #         print(f"⚠️ Não consegui renomear {arq.name}: {e}")                                 
-    #     sb.encerra()
-    #     sb.finaliza_navegador()
-    #     sb.iniciar_driver()
+    # Atualização de PAC 2024 (sem apagar arquivo antes)
+    flow.atualizar_pac_em_lote(
+        exercicio="2024",
+        pasta=r"C:\SEPLAN\siop-bot\xls\altera\Dezembro - 2024",
+        data_referencia="31/12/2024",
+        reiniciar_driver_entre_arquivos=True,
+        apaga_antes=False,
+    )
         
 
     # Atualização de PAC em lote (fluxo padronizado)

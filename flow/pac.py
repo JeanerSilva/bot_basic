@@ -5,7 +5,7 @@ from .objetivo_especifico import objetivo_especifico
 
 
 class pac_lote:
-    def __init__(self, exercicio: str, pasta: str, data_referencia: str, reiniciar_driver_entre_arquivos: bool = True):
+    def __init__(self, exercicio: str, pasta: str, data_referencia: str, reiniciar_driver_entre_arquivos: bool = True, apaga_antes: bool = True):
         if not exercicio or not str(exercicio).strip():
             raise ValueError("❌ Parâmetro 'exercicio' é obrigatório e não pode estar vazio.")
         if not pasta or not str(pasta).strip():
@@ -17,6 +17,7 @@ class pac_lote:
         self.pasta = pasta
         self.data_referencia = data_referencia
         self.reiniciar_driver_entre_arquivos = reiniciar_driver_entre_arquivos
+        self.apaga_antes = apaga_antes
 
     def atualizar(self):
         sb.define_exercicio(self.exercicio)
@@ -40,12 +41,15 @@ class pac_lote:
             objetivo = sb.monta_objetivo(num)
             arquivo = str(path / arq.name)
 
-            objetivo_especifico(objetivo)\
+            fluxo = objetivo_especifico(objetivo)\
                 .acessa()\
                 .lista()\
-                .seleciona_objetivo_listado()\
-                .apaga_arquivo_pac()\
-                .adiciona_arquivo_pac(
+                .seleciona_objetivo_listado()
+
+            if self.apaga_antes:
+                fluxo = fluxo.apaga_arquivo_pac()
+
+            fluxo.adiciona_arquivo_pac(
                     f"OE {objetivo}: Ações do Novo PAC (Data de referência: {self.data_referencia}).",
                     arquivo,
                     objetivo,
@@ -69,7 +73,7 @@ class pac_lote:
         return self
 
 
-def atualizar_pac_em_lote(exercicio: str, pasta: str, data_referencia: str, reiniciar_driver_entre_arquivos: bool = True):
-    return pac_lote(exercicio, pasta, data_referencia, reiniciar_driver_entre_arquivos).atualizar()
+def atualizar_pac_em_lote(exercicio: str, pasta: str, data_referencia: str, reiniciar_driver_entre_arquivos: bool = True, apaga_antes: bool = True):
+    return pac_lote(exercicio, pasta, data_referencia, reiniciar_driver_entre_arquivos, apaga_antes).atualizar()
 
 

@@ -31,10 +31,7 @@ class PowerBIFlow:
             # Aguarda especificamente por elementos do Power BI
             self._wait_for_powerbi_elements()
 
-                        # Debug: lista todos os elementos numéricos encontrados
-            self._debug_elementos_numericos()
-
-            # Tenta localizar o elemento visual usando diferentes estratégias
+                        # Tenta localizar o elemento visual usando diferentes estratégias
             valor = self._ler_valor_objetivos()
 
             if valor:
@@ -111,39 +108,6 @@ class PowerBIFlow:
                 continue
         return total
 
-    def _debug_elementos_numericos(self):
-        """Debug: mostra todos os elementos numéricos encontrados"""
-        print("🔍 Debug: Listando elementos numéricos encontrados...")
-        
-        xpaths_debug = [
-            "//*[contains(@class, 'value')]",
-            "//*[text() and string-length(text()) <= 4]",
-            "//text[string-length(.) <= 4]",
-            "//*[contains(text(), '463')]",
-            "//*[contains(text(), 'Objetivos')]"
-        ]
-        
-        for i, xpath in enumerate(xpaths_debug, 1):
-            try:
-                elements = self.web_actions.driver.find_elements(By.XPATH, xpath)
-                print(f"   {i}. XPath: {xpath[:50]}... → {len(elements)} elementos")
-                
-                for j, element in enumerate(elements[:3]):  # Mostra apenas os 3 primeiros
-                    try:
-                        texto = element.text.strip()
-                        if texto:
-                            print(f"      [{j+1}] Texto: '{texto}' (Tag: {element.tag_name})")
-                        else:
-                            print(f"      [{j+1}] Texto vazio (Tag: {element.tag_name})")
-                    except Exception as e:
-                        print(f"      [{j+1}] Erro ao ler texto: {e}")
-                        
-                if len(elements) > 3:
-                    print(f"      ... e mais {len(elements) - 3} elementos")
-                    
-            except Exception as e:
-                print(f"   {i}. Erro no XPath: {str(e)[:50]}...")
-
     def _ler_valor_objetivos(self):
         """Tenta ler o valor dos Objetivos Específicos usando diferentes estratégias"""
         
@@ -157,14 +121,17 @@ class PowerBIFlow:
                 "//div[contains(text(), 'Objetivos Específicos')]",
                 "//span[contains(text(), 'Objetivos Específicos')]",
                 "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'objetivos específicos')]",
-                "//*[contains(translate(text(), 'ÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛ', 'aeiouaeiouaoaeiou'), 'objetivos especificos')]"
+                "//*[contains(translate(text(), 'ÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛ', 'aeiouaeiouaoaeiou'), 'objetivos especificos')]",
+                "//*[contains(text(), 'Objetivos')]",  # Busca mais genérica
+                "//*[contains(text(), 'objetivos')]"   # Busca case-insensitive
             ]
             
             elemento_objetivos = None
             for xpath in xpaths_objetivos:
                 try:
-                    elemento_objetivos = self.web_actions.driver.find_element(By.XPATH, xpath)
-                    if elemento_objetivos:
+                    elementos = self.web_actions.driver.find_elements(By.XPATH, xpath)
+                    if elementos:
+                        elemento_objetivos = elementos[0]  # Pega o primeiro encontrado
                         print(f"✅ Texto encontrado com XPath: {xpath}")
                         break
                 except:
@@ -238,37 +205,42 @@ class PowerBIFlow:
         except Exception as e:
             print(f"⚠️ Estratégia 4 falhou: {e}")
         
-        # Estratégia 5: Buscar por qualquer elemento que contenha "463"
+        # Estratégia 5: Análise estrutural do Power BI - busca por SVGs com estrutura de card
         try:
-            print("🔍 Tentativa 5: Buscando por elementos que contenham '463'...")
+            print("🔍 Tentativa 5: Análise estrutural de SVGs do Power BI...")
             
-            elementos_463 = self.web_actions.driver.find_elements(
+            # Busca por SVGs que tenham estrutura típica de card do Power BI
+            svgs_cards = self.web_actions.driver.find_elements(
                 By.XPATH, 
-                "//*[contains(text(), '463')]"
+                "//svg[contains(@class, 'card') or .//*[contains(@class, 'card')]]"
             )
             
-            print(f"   Encontrados {len(elementos_463)} elementos com '463'")
+            print(f"   Encontrados {len(svgs_cards)} SVGs com estrutura de card")
             
-            for i, elemento in enumerate(elementos_463):
+            for i, svg in enumerate(svgs_cards):
                 try:
-                    texto = elemento.text.strip()
-                    print(f"   Elemento {i+1}: '{texto}' (Tag: {elemento.tag_name})")
+                    # Busca por elementos de texto dentro do SVG
+                    elementos_texto = svg.find_elements(By.XPATH, ".//text")
                     
-                    if '463' in texto:
-                        # Se o texto é exatamente "463", retorna
-                        if texto == '463':
-                            print(f"✅ Valor exato encontrado: {texto}")
-                            return texto
+                    if len(elementos_texto) >= 2:  # Card deve ter pelo menos label e valor
+                        textos = [elem.text.strip() for elem in elementos_texto if elem.text.strip()]
+                        print(f"   SVG {i+1}: {textos}")
                         
-                        # Se contém 463, tenta extrair números
-                        matches = re.findall(r'\b\d+\b', texto)
-                        for match in matches:
-                            if match == '463':
-                                print(f"✅ Valor extraído: {match}")
-                                return match
+                        # Procura por padrão: um número + "Objetivos Específicos"
+                        for j, texto in enumerate(textos):
+                            if texto.isdigit() and len(texto) <= 4:  # É um número
+                                # Verifica se o próximo texto contém "Objetivos"
+                                if j + 1 < len(textos) and "objetivos" in textos[j + 1].lower():
+                                    print(f"✅ Valor encontrado por análise estrutural: {texto}")
+                                    return texto
                                 
+                                # Verifica se o texto anterior contém "Objetivos"
+                                if j > 0 and "objetivos" in textos[j - 1].lower():
+                                    print(f"✅ Valor encontrado por análise estrutural: {texto}")
+                                    return texto
+                                    
                 except Exception as e:
-                    print(f"   Erro ao processar elemento {i+1}: {e}")
+                    print(f"   Erro ao analisar SVG {i+1}: {e}")
                         
         except Exception as e:
             print(f"⚠️ Estratégia 5 falhou: {e}")
